@@ -18,11 +18,11 @@ const SignUpPage = () => {
           className={`hidden sm:flex h-screen align-middle bg-gradient-to-r justify-center items-center xl:col-span-2`}
         >
           <div className="justify-center flex-col flex align-middle items-center">
-            <Image src={theme.theme === "dark" ? dark_logo : light_logo} alt="Logo" className="w-1/2" />
+            <Image src={theme.theme === "dark" ? dark_logo : light_logo} alt="Logo" className="w-[20rem]" />
           </div>
         </div>
         <div
-          className={`flex w-full h-screen align-middle justify-center items-center border-silver-500 shadow-2xl dark:bg-white`}
+          className={`flex w-full h-screen align-middle justify-center items-center border-silver-500 shadow-2xl `}
         >
           <SignUpForm />
         </div>
