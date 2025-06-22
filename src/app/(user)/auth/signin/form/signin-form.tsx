@@ -167,7 +167,7 @@ export const SignInForm = () => {
               href="/auth/account-recovery"
               className="text-xs text-gray-600 hover:text-blue-500"
             >
-              Forget password?
+              Forgot password?
             </Link>
             <Link
               href="/auth/signup"
