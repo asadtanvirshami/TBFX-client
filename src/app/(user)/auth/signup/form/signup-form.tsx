@@ -95,7 +95,7 @@ const SignUpForm = () => {
   return (
     <Card className="w-[28rem] font-[family-name:var(--font-poppins)] shadow-lg fade-left">
       <CardHeader>
-        <CardTitle className="text-4xl !text-pink-400">Sign In</CardTitle>
+        <CardTitle className="text-4xl !text-pink-400">Sign Up</CardTitle>
         <CardDescription>Enter credentials to continue.</CardDescription>
       </CardHeader>
       <CardContent>
