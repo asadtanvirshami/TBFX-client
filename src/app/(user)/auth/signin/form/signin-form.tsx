@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "@/schemas/auth-schema/schema";
 import { SignInFormData } from "@/types/auth-type/type";
-import { useAuth } from "@/hooks/use-auth";
+import { useGoogleSignin } from "@/hooks/auth/use-auth";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -24,12 +24,13 @@ import { LucideLoaderCircle } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { decodeToken } from "@/utils/jwt";
 import { loginSuccess } from "@/redux/actions/user-action";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { GoogleCredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { handleError } from "@/utils/error-handler";
-
+import { useUser } from "@/hooks/user/use-user";
+import { useSignin } from "@/hooks/auth/use-auth";
 /**
  * SignInForm
  *
@@ -42,8 +43,10 @@ import { handleError } from "@/utils/error-handler";
  */
 export const SignInForm = () => {
   const router = useRouter();
+  const signin = useSignin();
+  const googleSignin = useGoogleSignin();
   const dispatch = useDispatch();
-  const { signin } = useAuth();
+  const { refetch } = useUser();
   const form = useForm<SignInFormData>({
     resolver: yupResolver(signInSchema),
     defaultValues: {
@@ -58,6 +61,7 @@ export const SignInForm = () => {
     setError,
     formState: { isSubmitting },
   } = form;
+
   /**
    * @description Handle form submission, login the user and redirect to dashboard
    * @param {SignInFormData} data Form data
@@ -72,7 +76,7 @@ export const SignInForm = () => {
          * @param {SignInResponse} data Response data
          * @returns {void}
          */
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
           if (data.accessToken === null || data.success === false) {
             setError("email", {
               type: "server",
@@ -83,14 +87,18 @@ export const SignInForm = () => {
             });
             return;
           }
-          const token = decodeToken(data.accessToken);
-          dispatch(loginSuccess(token));
+
+          const result = await refetch();
+          if (result.isError) return;
+
+          dispatch(loginSuccess(result.data.user));
+
           router.push("/");
           form.reset();
         },
         onError: (error) => {
           handleError(error, {
-            context: "SigninForm",
+            context: "Signin-Form",
             notify: false,
             setFormError: (msg) => {
               form.setError("root", {
@@ -102,6 +110,63 @@ export const SignInForm = () => {
         },
       }
     );
+  };
+
+  /**
+   * @description Handle successful response from Google Sign-in
+   * @param {GoogleCredentialResponse} credentialResponse Response from Google
+   * @returns {Promise<void>}
+   */
+  const handleGoogleSuccess = async (credentialResponse: GoogleCredentialResponse) => {
+    if (!credentialResponse?.credential) return;
+
+    const googleCredentials = credentialResponse.credential;
+    googleSignin.mutate(
+      { token: googleCredentials },
+      {
+        onSuccess: async (data) => {
+          if (data.accessToken === null || data.success === false) {
+            return;
+          }
+
+          const result = await refetch();
+          if (result.isError) return;
+
+          dispatch(loginSuccess(result.data.user));
+          router.push("/");
+        },
+        onError: (error) => {
+          handleError(error, {
+            context: "Signin-Form",
+            notify: false,
+            setFormError: (msg) => {
+              form.setError("root", {
+                type: "manual",
+                message: msg,
+              });
+            },
+          });
+        }
+      }
+    );
+  };
+
+  /**
+   * @description Handle an error from the Google Sign-in
+   * @returns {void}
+   */
+  const handleGoogleError = () => {
+    handleError("Google-Signin-Error", {
+      context: "Google-Signin",
+      notify: false,
+      setFormError: (msg) => {
+        form.setError("root", {
+          type: "manual",
+          message: msg,
+        });
+      },
+    });
+
   };
 
   return (
@@ -147,17 +212,28 @@ export const SignInForm = () => {
                 </FormItem>
               )}
             />
+            <div className="flex flex-col">
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {isSubmitting || signin.isPending ? (
+                  <React.Fragment>
+                    Signing in
+                    <LucideLoaderCircle size={22} className="animate-spin" />
+                  </React.Fragment>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
 
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {isSubmitting || signin.isPending ? (
-                <React.Fragment>
-                  Signing in
-                  <LucideLoaderCircle size={22} className="animate-spin" />
-                </React.Fragment>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
+              <div className="flex justify-center mt-5">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  useOneTap
+                />
+              </div>
+            </div>
+
+
           </form>
         </Form>
         <Separator className="my-3" />

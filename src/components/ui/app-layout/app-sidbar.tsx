@@ -143,7 +143,7 @@ const data = {
       icon: Send,
     },
   ],
- 
+
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -154,12 +154,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <Image src={theme.theme === "dark" ? dark_logo : light_logo} alt="Logo" width={50} height={50} />
-                <div className="grid flex-1 text-left text-sm leading-tight font-[family-name:var(--font-poppins)]">
-                  <span className="font-  semibold">BackTrading</span>
-                </div>
-              </a>
+              <Image src={theme.theme === "dark" ? dark_logo : light_logo} alt="Logo" width={50} height={50} />
+              <div className="grid flex-1 text-left text-sm leading-tight font-[family-name:var(--font-poppins)]">
+                <span className="font-  semibold">BackTrading</span>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { recoverySchema } from "@/schemas/auth-schema/schema";
 import { RecoveryFormData } from "@/types/auth-type/type";
-import { useAuth } from "@/hooks/use-auth";
+import { useAccountRecovery } from "@/hooks/auth/use-auth";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -31,7 +31,7 @@ import { handleError } from "@/utils/error-handler";
 
 const RecoveryForm = () => {
   const router = useRouter();
-  const { account_recovery } = useAuth();
+  const account_recovery = useAccountRecovery()
 
   const form = useForm<RecoveryFormData>({
     resolver: yupResolver(recoverySchema),

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "@/schemas/auth-schema/schema";
 import { SignUpFormData } from "@/types/auth-type/type";
-import { useAuth } from "@/hooks/use-auth";
+import { useSignup } from "@/hooks/auth/use-auth";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -31,7 +31,7 @@ import { handleError } from "@/utils/error-handler";
 
 const SignUpForm = () => {
   const router = useRouter();
-  const { signup } = useAuth();
+  const signup = useSignup();
 
   const form = useForm<SignUpFormData>({
     resolver: yupResolver(signUpSchema),
@@ -50,15 +50,15 @@ const SignUpForm = () => {
     formState: { errors, isSubmitting },
   } = form;
 
-/**
- * @description Handle form submission to register a new user.
- * If the registration is successful, store the email in session storage
- * and redirect to the OTP page. If an error occurs during registration,
- * display an appropriate error message.
- * 
- * @param {SignUpFormData} data - The form data containing user registration details.
- * @returns {Promise<void>}
- */
+  /**
+   * @description Handle form submission to register a new user.
+   * If the registration is successful, store the email in session storage
+   * and redirect to the OTP page. If an error occurs during registration,
+   * display an appropriate error message.
+   * 
+   * @param {SignUpFormData} data - The form data containing user registration details.
+   * @returns {Promise<void>}
+   */
 
   const onSubmit = async (data: SignUpFormData) => {
     signup.mutate(
