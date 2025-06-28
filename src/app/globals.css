@@ -259,3 +259,32 @@
 .fade-in-up-right {
   animation: fade-in-up-right 0.5s ease-out forwards;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+/*======= Scroller Css======*/
+::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+  border: 1px solid #d5d5d5;
+  display: none;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  display: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: silver;
+  border-radius: 10px;
+  display: none;
+}
