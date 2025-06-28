@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "@/schemas/auth-schema/schema";
 import { SignUpFormData } from "@/types/auth-type/type";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/auth/use-auth";
 import { Input } from "@/components/ui/input";
 import {
   Form,

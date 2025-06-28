@@ -46,11 +46,7 @@ export default function MainLayout({
   return (
     <StoreProvider>
       <ReactQueryClientProvider>
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarTrigger />
-          <React.Fragment>{children}</React.Fragment>
-        </SidebarProvider>
+        <React.Fragment>{children}</React.Fragment>
       </ReactQueryClientProvider>
     </StoreProvider>
   );

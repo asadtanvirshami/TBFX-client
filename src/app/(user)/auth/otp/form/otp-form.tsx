@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { otpSchema } from "@/schemas/auth-schema/schema";
 import { OTPFormData } from "@/types/auth-type/type";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks/auth/use-auth";
 import {
   InputOTP,
   InputOTPGroup,

@@ -1,6 +1,7 @@
 //app/(user)/layout.tsx
 
 import MainLayout from "@/components/ui/app-layout/main-layout";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import React, { memo } from "react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -20,7 +21,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   //     </div>
   //   </div>
   return <MainLayout>
-    <React.Fragment>{children}</React.Fragment>
+    <GoogleOAuthProvider
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
+    >
+      <React.Fragment>{children}</React.Fragment>
+    </GoogleOAuthProvider>
   </MainLayout>;
 };
 
