@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { otpSchema } from "@/schemas/auth-schema/schema";
 import { OTPFormData } from "@/types/auth-type/type";
-import { useAuth } from "@/hooks/auth/use-auth";
+import { useResendOtp, useVerifyOtp } from "@/hooks/auth/use-auth";
 import {
   InputOTP,
   InputOTPGroup,
@@ -40,7 +40,8 @@ import { useRouter } from "next/navigation";
  */
 
 const OtpForm = () => {
-  const { verifyOtp, resendOtp } = useAuth();
+  const resendOtp = useResendOtp();
+  const verifyOtp = useVerifyOtp();
   const router = useRouter();
 
   const [otpSent, setOtpSent] = useState<boolean>(false);
