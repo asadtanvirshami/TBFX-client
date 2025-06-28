@@ -3,13 +3,19 @@ import { Button } from '../button'
 
 const HeroSection = () => {
     return (
-        <div className='w-[50rem]'>
+        <div className="w-full max-w-4xl px-4 mx-auto text-center md:text-left">
             <div>
-                <h1 aria-label='title' className='text-[4rem] text-wrap font-semibold'>Optimize your trading with effective visual backtesting.</h1>
-                <desc aria-label='desc' className='text-[2.5rem]'>Analyze, record and improve operations with real data & accurate tools.</desc>
+                <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                    Optimize your trading with effective visual backtesting.
+                </h1>
+                <p className="mt-4 text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300">
+                    Analyze, record and improve operations with real data & accurate tools.
+                </p>
             </div>
-            <div className='mt-5'>
-                <Button size={'lg'} className=' bg-gradient-to-tr from-pink-500 via-pin-500 to-pink-500 dark:text-white light:text-black'>Subscribe</Button>
+            <div className="mt-8">
+                <Button size={'lg'} className="px-8 py-3 text-lg font-semibold text-white bg-gradient-to-tr from-pink-500 to-rose-500 rounded-lg shadow-lg hover:scale-105 transform transition-transform duration-300 ease-in-out">
+                    Subscribe
+                </Button>
             </div>
         </div>
     )
