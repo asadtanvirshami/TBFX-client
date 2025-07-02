@@ -73,7 +73,7 @@ const DayCell = (
             <Tooltip key={idx}>
               <TooltipTrigger asChild>
                 <div
-                  className={`truncate px-1 py-0.5 rounded text-[13px] cursor-grab text-white ${
+                  className={`truncate text-[11px] px-1 py-0.5 rounded max-w-full overflow-hidden whitespace-nowrap cursor-pointer text-white ${
                     trade.profit >= 0 ? "bg-green-500" : "bg-red-500"
                   }`}
                   draggable
@@ -126,7 +126,7 @@ function TradeCalendarDemo({
             <DayPicker
               showOutsideDays={showOutsideDays}
               className={cn(
-                "bg-card group/calendar border p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+                "bg-card h-96 md:h-full lg:h-full group/calendar border p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
                 String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
                 String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
                 className
@@ -193,7 +193,11 @@ function TradeCalendarDemo({
                   "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none",
                   defaultClassNames.weekday
                 ),
-                week: cn("flex w-full mt-2", defaultClassNames.week),
+                week: cn(
+                  "grid grid-cols-7 w-full gap-1",
+                  defaultClassNames.week
+                ),
+
                 week_number_header: cn(
                   "select-none w-(--cell-size)",
                   defaultClassNames.week_number_header
@@ -203,7 +207,7 @@ function TradeCalendarDemo({
                   defaultClassNames.week_number
                 ),
                 day: cn(
-                  "relative w-full h-auto p-0 text-center aspect-square  group/day select-none  [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md",
+                  "relative w-full h-auto mt-2 p-0 text-center aspect-square  group/day select-none  [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md",
                   defaultClassNames.day
                 ),
                 range_start: cn(
