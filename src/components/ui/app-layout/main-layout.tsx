@@ -7,6 +7,7 @@ import ReactQueryClientProvider from "@/provider/react-query";
 import StoreProvider from "@/redux/store-provider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Header from "../header";
+import Footer from "../footer";
 
 export default function MainLayout({
   children,
@@ -48,6 +49,7 @@ export default function MainLayout({
       <ReactQueryClientProvider>
         <Header />
         {children}
+        <Footer />
       </ReactQueryClientProvider>
     </StoreProvider>
   );
