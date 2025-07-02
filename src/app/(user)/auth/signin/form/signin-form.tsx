@@ -91,10 +91,11 @@ export const SignInForm = () => {
           const result = await refetch();
           if (result.isError) return;
 
-          dispatch(loginSuccess(result.data.user));
-
-          router.push("/");
-          form.reset();
+          if (result.data.valid && result.data.user) {
+            dispatch(loginSuccess(result.data.user));
+            router.push("/protected-route/dashboard");
+            form.reset();
+          }
         },
         onError: (error) => {
           handleError(error, {
