@@ -6,7 +6,6 @@ import {
   Calendar,
   ChartArea,
   ChartBar,
-  Cloud,
   Link,
 } from "lucide-react";
 const OfferCard = ({
