@@ -9,16 +9,18 @@ import {
   Link,
 } from "lucide-react";
 const OfferCard = ({
+  key,
   title,
   description,
   icon,
 }: {
+  key: string;
   title: string;
   description: string;
   icon: React.ReactNode;
 }) => {
   return (
-    <Card>
+    <Card key={key}>
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
           {title} {icon}
@@ -79,6 +81,7 @@ const OfferSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-3">
         {tradingBacktestingFeatures.map((feature) => (
           <OfferCard
+            key={feature.title}
             title={feature.title}
             description={feature.description}
             icon={feature.icon}
