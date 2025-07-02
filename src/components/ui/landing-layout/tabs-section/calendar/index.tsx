@@ -126,7 +126,7 @@ function TradeCalendarDemo({
             <DayPicker
               showOutsideDays={showOutsideDays}
               className={cn(
-                "bg-card h-full group/calendar border p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+                "bg-card h-96 md:h-full lg:h-full group/calendar border p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
                 String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
                 String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
                 className
@@ -207,7 +207,7 @@ function TradeCalendarDemo({
                   defaultClassNames.week_number
                 ),
                 day: cn(
-                  "relative w-full h-auto p-0 text-center aspect-square  group/day select-none  [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md",
+                  "relative w-full h-auto mt-2 p-0 text-center aspect-square  group/day select-none  [&:first-child[data-selected=true]_button]:rounded-l-md [&:last-child[data-selected=true]_button]:rounded-r-md",
                   defaultClassNames.day
                 ),
                 range_start: cn(
