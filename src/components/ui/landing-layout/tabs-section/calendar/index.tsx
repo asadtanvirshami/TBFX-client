@@ -73,7 +73,7 @@ const DayCell = (
             <Tooltip key={idx}>
               <TooltipTrigger asChild>
                 <div
-                  className={`truncate px-1 py-0.5 rounded text-[13px] cursor-grab text-white ${
+                  className={`truncate text-[11px] px-1 py-0.5 rounded max-w-full overflow-hidden whitespace-nowrap cursor-pointer text-white ${
                     trade.profit >= 0 ? "bg-green-500" : "bg-red-500"
                   }`}
                   draggable
@@ -193,7 +193,11 @@ function TradeCalendarDemo({
                   "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none",
                   defaultClassNames.weekday
                 ),
-                week: cn("flex w-full mt-2", defaultClassNames.week),
+                week: cn(
+                  "grid grid-cols-7 w-full gap-1",
+                  defaultClassNames.week
+                ),
+
                 week_number_header: cn(
                   "select-none w-(--cell-size)",
                   defaultClassNames.week_number_header
