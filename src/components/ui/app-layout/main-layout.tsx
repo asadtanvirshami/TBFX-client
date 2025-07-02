@@ -8,6 +8,7 @@ import StoreProvider from "@/redux/store-provider";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import Header from "../header";
+import Footer from "../footer";
 
 export default function MainLayout({
   children,
@@ -49,6 +50,7 @@ export default function MainLayout({
       <ReactQueryClientProvider>
         <Header />
         <React.Fragment>{children}</React.Fragment>
+        <Footer />
       </ReactQueryClientProvider>
     </StoreProvider>
   );
