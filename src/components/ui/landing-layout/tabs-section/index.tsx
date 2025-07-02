@@ -9,7 +9,7 @@ import { trades } from "./calendar/mock/data";
 const TabsSection = () => {
   return (
     <div className="flex justify-center">
-      <div className="shadow-lg w-screen md:w-full lg:w-full border rounded-lg p-5 bg-card">
+      <div className="shadow-lg h-full w-screen md:w-full lg:w-full border rounded-lg p-5 bg-card">
         <Tabs defaultValue="dashboard">
           {/* Tab Triggers */}
           <TabsList>
@@ -34,7 +34,7 @@ const TabsSection = () => {
             <TradesDemo />
           </TabsContent>
           {/* Calendar */}
-          <TabsContent value="calendar">
+          <TabsContent className="h-full" value="calendar">
             <TradeCalendarDemo taskData={trades} />
           </TabsContent>
         </Tabs>
