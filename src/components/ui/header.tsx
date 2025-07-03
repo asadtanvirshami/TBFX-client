@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { ModeToggle } from "./theme-provider/toggle-button";
+
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -15,6 +16,8 @@ import {
 
 import dark_logo from "../../../public/assets/dark.png";
 import light_logo from "../../../public/assets/light.png";
+import LanguageSwitcher from "./language-switcher";
+import { Button } from "./button";
 
 const Header = () => {
   const { theme } = useTheme();
@@ -54,11 +57,12 @@ const Header = () => {
             </NavigationMenuList>
           </NavigationMenu>
           <ModeToggle />
+          <LanguageSwitcher/>
         </div>
 
         {/* Hamburger (Mobile) */}
         <div className="md:hidden flex items-center gap-2">
-          <ModeToggle />
+        <ModeToggle />
           <button
             className="flex flex-col gap-1.5 w-6 h-6 justify-center items-center group relative"
             onClick={() => setIsOpen(!isOpen)}
@@ -90,6 +94,9 @@ const Header = () => {
         }`}
       >
         <div className="px-4 flex flex-col gap-3">
+  
+        <LanguageSwitcher/>
+        <Button className=" bg-gradient-to-r from-pink-500 to-rose-500">          
           <Link
             href="/auth/signin"
             onClick={() => setIsOpen(false)}
@@ -97,6 +104,7 @@ const Header = () => {
           >
             Signin
           </Link>
+        </Button>
           {/* Add more mobile links here if needed */}
         </div>
       </div>

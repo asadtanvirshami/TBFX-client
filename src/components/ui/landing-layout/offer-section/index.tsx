@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../card";
 import {
@@ -8,82 +10,79 @@ import {
   ChartBar,
   Link,
 } from "lucide-react";
+import { FormattedMessage } from "react-intl";
+
 const OfferCard = ({
-  key,
-  title,
-  description,
+  titleId,
+  descriptionId,
   icon,
 }: {
-  key: string;
-  title: string;
-  description: string;
+  titleId: string;
+  descriptionId: string;
   icon: React.ReactNode;
 }) => {
   return (
-    <Card key={key}>
+    <Card>
       <CardHeader>
         <CardTitle className="flex justify-between items-center">
-          {title} {icon}
+          <FormattedMessage id={titleId} /> {icon}
         </CardTitle>
       </CardHeader>
-      <CardContent>{description}</CardContent>
+      <CardContent>
+        <FormattedMessage id={descriptionId} />
+      </CardContent>
     </Card>
   );
 };
 
 const OfferSection = () => {
-  const tradingBacktestingFeatures = [
+  const features = [
     {
-      title: "Strategy Backtesting",
-      description:
-        "Simulate and validate your trading strategies using historical market data across various timeframes and asset classes.",
+      titleId: "features_title01",
+      descriptionId: "features_desc01",
       icon: <ChartArea />,
     },
     {
-      title: "Real-Time Market News",
-      description:
-        "Stay ahead with up-to-the-minute financial news and updates from global markets.",
+      titleId: "features_title02",
+      descriptionId: "features_desc02",
       icon: <ArrowDownUp />,
     },
     {
-      title: "Economic Calendars & Events",
-      description:
-        "Track upcoming economic releases, central bank decisions, and market-moving events for better planning.",
+      titleId: "features_title03",
+      descriptionId: "features_desc03",
       icon: <Calendar />,
     },
     {
-      title: "MetaTrader Integration",
-      description:
-        "Seamlessly sync with MT4/MT5 to mirror trades, import data, and manage positions from one platform.",
+      titleId: "features_title04",
+      descriptionId: "features_desc04",
       icon: <Link />,
     },
     {
-      title: "Lot Size & Risk Calculators",
-      description:
-        "Calculate lot sizes, pip values, and risk percentages based on your account balance and strategy.",
+      titleId: "features_title05",
+      descriptionId: "features_desc05",
       icon: <Calculator />,
     },
     {
-      title: "Performance Analytics",
-      description:
-        "Analyze your trade history, spot patterns, and generate detailed performance reports.",
+      titleId: "features_title06",
+      descriptionId: "features_desc06",
       icon: <ChartBar />,
     },
   ];
+
   return (
     <div className="max-w-5xl mx-auto space-y-6 mt-12">
       <span className="text-4xl space-x-3 flex justify-center md:flex lg:flex md:text-5xl font-extrabold tracking-tight">
-        <h1 className="t bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
-          What We
+        <h1 className="bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
+          <FormattedMessage id="offers_title" defaultMessage="What We Offer" />
         </h1>
-        <h1>Offer</h1>
       </span>
+
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-3">
-        {tradingBacktestingFeatures.map((feature) => (
+        {features.map((feature) => (
           <OfferCard
-            key={feature.title}
-            title={feature.title}
-            description={feature.description}
+            key={feature.titleId}
+            titleId={feature.titleId}
+            descriptionId={feature.descriptionId}
             icon={feature.icon}
           />
         ))}

@@ -17,6 +17,7 @@ import { format, isSameDay } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipContent,
@@ -25,12 +26,13 @@ import {
 } from "@/components/ui/tooltip";
 
 interface Trade {
-  date: string; // e.g. "2025-07-01"
-  pair: string;
-  profit: number;
-  entry: string;
-  exit: string;
-  notes: string;
+  id: string;
+  date: string; // ISO format e.g. "2025-07-01T09:30:00Z"
+  pair: string; // Currency pair or instrument
+  profit: number; // Profit or loss amount
+  entry: string; // Entry price or signal
+  exit: string; // Exit price or reason
+  notes: string; // Optional notes
 }
 
 const TradeContext = React.createContext<
@@ -62,24 +64,38 @@ const DayCell = (
   const matchingTrades = trades.filter((trade) =>
     isSameDay(new Date(trade.date), props.day.date)
   );
+  
+  const handleDateClick = () => {
+    const event = new CustomEvent('dateSelected', { detail: props.day.date });
+    window.dispatchEvent(event);
+  };
+
   return (
     <td {...props}>
-      <div className="w-full h-full flex flex-col items-center justify-start text-xs p-1 relative">
+      <div 
+        className="w-full h-full flex flex-col items-center justify-start text-xs p-1 relative cursor-pointer"
+        onClick={handleDateClick}
+      >
         <div className="text-[15px] font-semibold text-center">
           {format(props.day.date, "d")}
         </div>
-        <div className="absolute top-5 left-0 right-0 space-y-1 px-1">
+        <div className="absolute top-5 left-0 right-0 space-y-1 px-1 pointer-events-none">
           {matchingTrades.slice(0, 3).map((trade, idx) => (
             <Tooltip key={idx}>
               <TooltipTrigger asChild>
                 <div
-                  className={`truncate text-[11px] px-1 py-0.5 rounded max-w-full overflow-hidden whitespace-nowrap cursor-pointer text-white ${
+                  className={`truncate text-[11px] px-1 py-0.5 rounded max-w-full overflow-hidden whitespace-nowrap text-white pointer-events-auto ${
                     trade.profit >= 0 ? "bg-green-500" : "bg-red-500"
                   }`}
                   draggable
-                  onDragStart={(e) =>
-                    e.dataTransfer.setData("text/plain", JSON.stringify(trade))
-                  }
+                  onDragStart={(e) => {
+                    e.stopPropagation();
+                    e.dataTransfer.setData("text/plain", JSON.stringify(trade));
+                  }}
+                  onClick={(e) =>{
+                    e.stopPropagation()
+                    handleDateClick()
+                  }}
                 >
                   {trade.pair}
                 </div>
@@ -99,6 +115,90 @@ const DayCell = (
   );
 };
 
+// ... existing code ...
+
+const SelectedDateTrades = ({ selectedDate, trades }: { selectedDate: Date | undefined; trades: Trade[] }) => {
+  if (!selectedDate) {
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="text-lg">Trade Details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">Select a date to view trades</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const selectedTrades = trades.filter((trade) =>
+    isSameDay(new Date(trade.date), selectedDate)
+  );
+
+  const totalProfit = selectedTrades.reduce((sum, trade) => sum + trade.profit, 0);
+  const winningTrades = selectedTrades.filter(trade => trade.profit > 0).length;
+  const losingTrades = selectedTrades.filter(trade => trade.profit < 0).length;
+
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="text-lg">
+          Trades for {format(selectedDate, "MMMM d, yyyy")}
+        </CardTitle>
+        <div className="flex gap-4 text-sm text-muted-foreground">
+          <span>Total: {selectedTrades.length}</span>
+          <span className={totalProfit >= 0 ? "text-green-600" : "text-red-600"}>
+            P/L: ${totalProfit.toFixed(2)}
+          </span>
+          <span className="text-green-600">Wins: {winningTrades}</span>
+          <span className="text-red-600">Losses: {losingTrades}</span>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {selectedTrades.length === 0 ? (
+          <p className="text-muted-foreground">No trades for this date</p>
+        ) : (
+          <div className="space-y-3">
+            {selectedTrades.map((trade, index) => (
+              <div
+                key={index}
+                className={`p-3 rounded-lg border !bg-card ${
+                  trade.profit >= 0 ? "border-green-500" : "border-red-500"
+                }`}
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <div className="font-semibold text-lg">{trade.pair}</div>
+                  <div className={`font-bold text-lg ${
+                    trade.profit >= 0 ? "text-green-600" : "text-red-600"
+                  }`}>
+                    ${trade.profit.toFixed(2)}
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Entry:</span>
+                    <span className="ml-1 font-medium">{trade.entry}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Exit:</span>
+                    <span className="ml-1 font-medium">{trade.exit}</span>
+                  </div>
+                </div>
+                {trade.notes && (
+                  <div className="mt-2 text-sm">
+                    <span className="text-muted-foreground">Notes:</span>
+                    <span className="ml-1 italic">{trade.notes}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 function TradeCalendarDemo({
   className,
   classNames,
@@ -115,13 +215,23 @@ function TradeCalendarDemo({
 }) {
   const defaultClassNames = getDefaultClassNames();
   const [taskList, setTaskList] = React.useState<Trade[]>(taskData);
+  const [selected, setSelected] = React.useState<Date | undefined>(undefined);
+  
+  React.useEffect(() => {
+    const handleDateSelected = (event: CustomEvent) => {
+      setSelected(event.detail);
+    };
 
+    window.addEventListener('dateSelected', handleDateSelected as EventListener);
+    return () => {
+      window.removeEventListener('dateSelected', handleDateSelected as EventListener);
+    };
+  }, []);
+  
   return (
     <TradeContext.Provider value={[taskList, setTaskList]}>
       <TooltipProvider>
-        {/* <div className=" grid grid-cols-2 gap-3"> */}
-        <div className="">
-          {/* className="overflow-x-auto" */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <DayPicker
               showOutsideDays={showOutsideDays}
@@ -270,6 +380,9 @@ function TradeCalendarDemo({
               {...props}
             />
           </div>
+          <div>
+            <SelectedDateTrades selectedDate={selected} trades={taskList} />
+          </div>
         </div>
       </TooltipProvider>
     </TradeContext.Provider>
@@ -284,10 +397,20 @@ function CalendarDayButton({
 }: React.ComponentProps<typeof DayButton>) {
   const defaultClassNames = getDefaultClassNames();
   const ref = React.useRef<HTMLButtonElement>(null);
+  const context = React.useContext(TradeContext);
+  const [, setTaskList] = context || [];
 
   React.useEffect(() => {
     if (modifiers.focused) ref.current?.focus();
   }, [modifiers.focused]);
+
+  const handleClick = () => {
+    if (setTaskList) {
+      // Update the selected date in the parent component
+      const event = new CustomEvent('dateSelected', { detail: day.date });
+      window.dispatchEvent(event);
+    }
+  };
 
   return (
     <Button
@@ -300,6 +423,7 @@ function CalendarDayButton({
         defaultClassNames.day,
         className
       )}
+      onClick={handleClick}
       {...props}
     />
   );
