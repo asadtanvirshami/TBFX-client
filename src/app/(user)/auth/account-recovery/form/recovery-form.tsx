@@ -31,7 +31,7 @@ import { handleError } from "@/utils/error-handler";
 
 const RecoveryForm = () => {
   const router = useRouter();
-  const account_recovery = useAccountRecovery()
+  const account_recovery = useAccountRecovery();
 
   const form = useForm<RecoveryFormData>({
     resolver: yupResolver(recoverySchema),
@@ -84,9 +84,11 @@ const RecoveryForm = () => {
   };
 
   return (
-    <Card className="w-[28rem] font-[family-name:var(--font-poppins)] shadow-lg fade-left">
+    <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
       <CardHeader>
-        <CardTitle className="text-4xl !text-pink-400">Account Recovery</CardTitle>
+        <CardTitle className="text-4xl !text-pink-400">
+          Account Recovery
+        </CardTitle>
         <CardDescription>
           Enter your email address associated with your account to continue.
         </CardDescription>

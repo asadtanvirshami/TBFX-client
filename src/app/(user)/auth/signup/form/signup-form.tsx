@@ -55,7 +55,7 @@ const SignUpForm = () => {
    * If the registration is successful, store the email in session storage
    * and redirect to the OTP page. If an error occurs during registration,
    * display an appropriate error message.
-   * 
+   *
    * @param {SignUpFormData} data - The form data containing user registration details.
    * @returns {Promise<void>}
    */
@@ -93,7 +93,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <Card className="w-[28rem] font-[family-name:var(--font-poppins)] shadow-lg fade-left">
+    <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
       <CardHeader>
         <CardTitle className="text-4xl !text-pink-400">Sign Up</CardTitle>
         <CardDescription>Enter credentials to continue.</CardDescription>
