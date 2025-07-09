@@ -171,7 +171,7 @@ export const SignInForm = () => {
   };
 
   return (
-    <Card className="w-[28rem] font-[family-name:var(--font-poppins)] shadow-lg fade-left">
+    <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
       <CardHeader>
         <CardTitle className="text-4xl !text-pink-400">Sign In</CardTitle>
         <CardDescription>Enter credentials to continue.</CardDescription>
