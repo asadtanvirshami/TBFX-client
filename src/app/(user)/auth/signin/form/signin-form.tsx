@@ -118,7 +118,9 @@ export const SignInForm = () => {
    * @param {GoogleCredentialResponse} credentialResponse Response from Google
    * @returns {Promise<void>}
    */
-  const handleGoogleSuccess = async (credentialResponse: GoogleCredentialResponse) => {
+  const handleGoogleSuccess = async (
+    credentialResponse: GoogleCredentialResponse
+  ) => {
     if (!credentialResponse?.credential) return;
 
     const googleCredentials = credentialResponse.credential;
@@ -147,7 +149,7 @@ export const SignInForm = () => {
               });
             },
           });
-        }
+        },
       }
     );
   };
@@ -167,7 +169,6 @@ export const SignInForm = () => {
         });
       },
     });
-
   };
 
   return (
@@ -191,6 +192,7 @@ export const SignInForm = () => {
                   <FormControl>
                     <Input
                       type="email"
+                      data-cy="#email"
                       placeholder="john@example.com"
                       {...field}
                     />
@@ -207,7 +209,12 @@ export const SignInForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="******" {...field} />
+                    <Input
+                      data-cy="#password"
+                      type="password"
+                      placeholder="******"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -233,8 +240,6 @@ export const SignInForm = () => {
                 />
               </div>
             </div>
-
-
           </form>
         </Form>
         <Separator className="my-3" />
