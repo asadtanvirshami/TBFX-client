@@ -28,6 +28,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { handleError } from "@/utils/error-handler";
+import { extractErrorMessage } from "@/utils/error-extractor";
 
 const RecoveryForm = () => {
   const router = useRouter();
@@ -118,7 +119,7 @@ const RecoveryForm = () => {
             />
             {errors.root?.message && (
               <div className="text-sm text-red-600 text-center">
-                {errors.root.message}
+                {extractErrorMessage(errors.root.message)}
               </div>
             )}
 

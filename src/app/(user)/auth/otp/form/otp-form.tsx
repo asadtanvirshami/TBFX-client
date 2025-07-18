@@ -30,6 +30,7 @@ import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { handleError } from "@/utils/error-handler";
 import { useRouter } from "next/navigation";
+import { extractErrorMessage } from "@/utils/error-extractor";
 
 /**
  * A form to verify the OTP sent to the user's email.
@@ -104,8 +105,10 @@ const OtpForm = () => {
               message: res.message || "Something went wrong",
             });
           }
-          sessionStorage.removeItem("email");
-          router.push("/");
+          if (res.success === true) {
+            sessionStorage.removeItem("email");
+            router.push("/");
+          }
         },
         onError: (error) => {
           handleError(error, {
@@ -140,7 +143,10 @@ const OtpForm = () => {
             });
             return;
           }
-          setOtpSent(true);
+          if (res.success === true) {
+            form.clearErrors();
+            setOtpSent(true);
+          }
         },
         onError: (error) => {
           handleError(error, {
@@ -199,7 +205,7 @@ const OtpForm = () => {
               />
             </div>
 
-            <Button type="submit" disabled={form.formState.isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               {isSubmitting || verifyOtp.isPending ? (
                 <React.Fragment>
                   Confirming OTP
@@ -230,9 +236,10 @@ const OtpForm = () => {
         <div className="row">
           {errors.root?.message && (
             <div className="text-xs text-red-600 text-center">
-              {errors.root.message}
+              {extractErrorMessage(errors.root.message)}
             </div>
           )}
+
           <div>
             {otpSent && (
               <div className="text-xs text-center">
