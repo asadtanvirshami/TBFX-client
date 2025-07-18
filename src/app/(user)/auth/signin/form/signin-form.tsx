@@ -31,6 +31,7 @@ import { GoogleCredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { handleError } from "@/utils/error-handler";
 import { useUser } from "@/hooks/user/use-user";
 import { useSignin } from "@/hooks/auth/use-auth";
+import { extractErrorMessage } from "@/utils/error-extractor";
 /**
  * SignInForm
  *
@@ -59,7 +60,7 @@ export const SignInForm = () => {
     handleSubmit,
     control,
     setError,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = form;
 
   /**
@@ -240,6 +241,11 @@ export const SignInForm = () => {
                 />
               </div>
             </div>
+            {errors.root?.message && (
+              <div className="text-xs text-red-600 text-center">
+                {extractErrorMessage(errors.root.message)}
+              </div>
+            )}
           </form>
         </Form>
         <Separator className="my-3" />
