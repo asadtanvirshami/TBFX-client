@@ -28,7 +28,7 @@ interface DistributionPieChartProps {
 export function DistributiionPieChart({
   chartData,
 }: DistributionPieChartProps) {
-  const chartConfig: ChartConfig = chartData.reduce((config, item, index) => {
+  const chartConfig: ChartConfig = chartData.reduce((config, item) => {
     config[item.pair] = {
       label: item.pair,
       color: item.fill,
