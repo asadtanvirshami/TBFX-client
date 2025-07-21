@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { AreaChart, Area, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -26,8 +26,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const description = "An interactive area chart";
+// Static Config
+const chartConfig: ChartConfig = {
+  profit: { label: "Profit", color: "hsl(var(--chart-1))" },
+  loss: { label: "Loss", color: "hsl(var(--chart-2))" },
+};
 
+// Static Chart Data (already done, great)
 const chartData = [
   { date: "2024-04-01", profit: 222, loss: 150 },
   { date: "2024-04-02", profit: 97, loss: 180 },
@@ -79,104 +84,46 @@ const chartData = [
   { date: "2024-05-18", profit: 315, loss: 350 },
   { date: "2024-05-19", profit: 235, loss: 180 },
   { date: "2024-05-20", profit: 177, loss: 230 },
-  { date: "2024-05-21", profit: 82, loss: 140 },
-  { date: "2024-05-22", profit: 81, loss: 120 },
-  { date: "2024-05-23", profit: 252, loss: 290 },
-  { date: "2024-05-24", profit: 294, loss: 220 },
-  { date: "2024-05-25", profit: 201, loss: 250 },
-  { date: "2024-05-26", profit: 213, loss: 170 },
-  { date: "2024-05-27", profit: 420, loss: 460 },
-  { date: "2024-05-28", profit: 233, loss: 190 },
-  { date: "2024-05-29", profit: 78, loss: 130 },
-  { date: "2024-05-30", profit: 340, loss: 280 },
-  { date: "2024-05-31", profit: 178, loss: 230 },
-  { date: "2024-06-01", profit: 178, loss: 200 },
-  { date: "2024-06-02", profit: 470, loss: 410 },
-  { date: "2024-06-03", profit: 103, loss: 160 },
-  { date: "2024-06-04", profit: 439, loss: 380 },
-  { date: "2024-06-05", profit: 88, loss: 140 },
-  { date: "2024-06-06", profit: 294, loss: 250 },
-  { date: "2024-06-07", profit: 323, loss: 370 },
-  { date: "2024-06-08", profit: 385, loss: 320 },
-  { date: "2024-06-09", profit: 438, loss: 480 },
-  { date: "2024-06-10", profit: 155, loss: 200 },
-  { date: "2024-06-11", profit: 92, loss: 150 },
-  { date: "2024-06-12", profit: 492, loss: 420 },
-  { date: "2024-06-13", profit: 81, loss: 130 },
-  { date: "2024-06-14", profit: 426, loss: 380 },
-  { date: "2024-06-15", profit: 307, loss: 350 },
-  { date: "2024-06-16", profit: 371, loss: 310 },
-  { date: "2024-06-17", profit: 475, loss: 520 },
-  { date: "2024-06-18", profit: 107, loss: 170 },
-  { date: "2024-06-19", profit: 341, loss: 290 },
-  { date: "2024-06-20", profit: 408, loss: 450 },
-  { date: "2024-06-21", profit: 169, loss: 210 },
-  { date: "2024-06-22", profit: 317, loss: 270 },
-  { date: "2024-06-23", profit: 480, loss: 530 },
-  { date: "2024-06-24", profit: 132, loss: 180 },
-  { date: "2024-06-25", profit: 141, loss: 190 },
-  { date: "2024-06-26", profit: 434, loss: 380 },
-  { date: "2024-06-27", profit: 448, loss: 490 },
-  { date: "2024-06-28", profit: 149, loss: 200 },
-  { date: "2024-06-29", profit: 103, loss: 160 },
-  { date: "2024-06-30", profit: 446, loss: 400 },
 ];
 
-const chartConfig = {
-  profit: {
-    label: "Profit",
-    color: "hsl(var(#90e0ef))", // Assuming --chart-1 is a dark blue
-  },
-  loss: {
-    label: "Loss",
-    color: "hsl(var(--chart-2))", // Assuming --chart-2 is a light blue
-  },
-} satisfies ChartConfig;
-
-export function AreaChartWidget() {
+const AreaChartWidget = React.memo(() => {
   const [timeRange, setTimeRange] = React.useState("90d");
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
+  const filteredData = React.useMemo(() => {
     const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
+    const days = timeRange === "30d" ? 30 : timeRange === "7d" ? 7 : 90;
     const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+    startDate.setDate(startDate.getDate() - days);
+    return chartData.filter((item) => new Date(item.date) >= startDate);
+  }, [timeRange]);
+
+  const formatDate = React.useCallback(
+    (value: string) =>
+      new Date(value).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+    []
+  );
 
   return (
     <div className="w-full">
-      <Card className="pt-0 w-full h-fit ">
-        <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <Card className="pt-0 w-full">
+        <CardHeader className="flex items-center gap-2 py-5 sm:flex-row">
           <div className="grid flex-1 gap-1">
             <CardTitle>P/L Area-Chart</CardTitle>
             <CardDescription>
-              Showing total profit and loss for the last 3 months
+              Showing total profit and loss over time
             </CardDescription>
           </div>
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger
-              className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-              aria-label="Select a value"
-            >
+            <SelectTrigger className="w-[160px] hidden sm:flex">
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="90d" className="rounded-lg">
-                Last 3 months
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
-              </SelectItem>
+            <SelectContent>
+              <SelectItem value="90d">Last 3 months</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="7d">Last 7 days</SelectItem>
             </SelectContent>
           </Select>
         </CardHeader>
@@ -187,56 +134,49 @@ export function AreaChartWidget() {
           >
             <AreaChart data={filteredData}>
               <defs>
-                <linearGradient id="loss" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ff758f" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#ff758f" stopOpacity={0.1} />
-                </linearGradient>
                 <linearGradient id="profit" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#74c69d" stopOpacity={0.8} />
                   <stop offset="95%" stopColor="#74c69d" stopOpacity={0.1} />
                 </linearGradient>
+                <linearGradient id="loss" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ff758f" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#ff758f" stopOpacity={0.1} />
+                </linearGradient>
               </defs>
-              <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} strokeOpacity={0.05} />
               <XAxis
                 dataKey="date"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
                 minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  });
-                }}
+                tickFormatter={formatDate}
               />
               <ChartTooltip
                 cursor={false}
                 content={
                   <ChartTooltipContent
-                    labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      });
-                    }}
+                    labelFormatter={formatDate}
                     indicator="dot"
                   />
                 }
               />
               <Area
                 dataKey="profit"
-                type="natural"
-                fill="#74c69d"
+                type="monotone"
+                fill="url(#profit)"
                 stroke="#74c69d"
+                strokeWidth={2}
+                isAnimationActive={false}
                 stackId="a"
               />
               <Area
                 dataKey="loss"
-                type="natural"
-                fill="#ff758f"
+                type="monotone"
+                fill="url(#loss)"
                 stroke="#ff758f"
+                strokeWidth={2}
+                isAnimationActive={false}
                 stackId="a"
               />
               <ChartLegend content={<ChartLegendContent />} />
@@ -246,4 +186,7 @@ export function AreaChartWidget() {
       </Card>
     </div>
   );
-}
+});
+
+AreaChartWidget.displayName = "AreaChartWidget";
+export { AreaChartWidget };

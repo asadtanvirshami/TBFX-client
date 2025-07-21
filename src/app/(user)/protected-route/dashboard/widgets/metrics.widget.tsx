@@ -19,7 +19,7 @@ const MetricsWidget: React.FC<MetricsWidgetProps> = ({ data }) => {
   const metrics = analyzeTrades(data);
   return (
     <div className="w-full h-full space-y-4">
-      <h1 className="text-2xl font-bold mt-2 mb-4">Metric's Summary</h1>
+      <h1 className="text-2xl font-bold mt-2 mb-4">{"Metric's Summary"}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <MetricCard
           Icon={() => <ChartCandlestickIcon className="w-5 h-5" />}

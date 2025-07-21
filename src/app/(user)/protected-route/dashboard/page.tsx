@@ -4,10 +4,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { redirect } from "next/navigation";
 import DashboardView from "./dashboard-view";
 import { cookies } from "next/headers";
-import { verifyJWTServer } from "@/lib/auth/verifyJWTServer";
 
 async function page() {
   const queryClient = new QueryClient();
@@ -30,11 +28,9 @@ async function page() {
   }
 
   return (
-    <>
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <DashboardView />
-      </HydrationBoundary>
-    </>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <DashboardView />
+    </HydrationBoundary>
   );
 }
 
