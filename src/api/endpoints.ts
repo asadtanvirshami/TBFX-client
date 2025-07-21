@@ -9,6 +9,7 @@ export const apiEndpoints = {
     reset: "/auth/reset",
     account_recovery: "/auth/account-recovery",
     me: "/auth/me",
+    verifyJWT: "/auth/verify-session",
   },
   users: {
     base: "/users",

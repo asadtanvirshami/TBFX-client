@@ -64,15 +64,15 @@ const DayCell = (
   const matchingTrades = trades.filter((trade) =>
     isSameDay(new Date(trade.date), props.day.date)
   );
-  
+
   const handleDateClick = () => {
-    const event = new CustomEvent('dateSelected', { detail: props.day.date });
+    const event = new CustomEvent("dateSelected", { detail: props.day.date });
     window.dispatchEvent(event);
   };
 
   return (
     <td {...props}>
-      <div 
+      <div
         className="w-full h-full flex flex-col items-center justify-start text-xs p-1 relative cursor-pointer"
         onClick={handleDateClick}
       >
@@ -92,9 +92,9 @@ const DayCell = (
                     e.stopPropagation();
                     e.dataTransfer.setData("text/plain", JSON.stringify(trade));
                   }}
-                  onClick={(e) =>{
-                    e.stopPropagation()
-                    handleDateClick()
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDateClick();
                   }}
                 >
                   {trade.pair}
@@ -117,7 +117,13 @@ const DayCell = (
 
 // ... existing code ...
 
-const SelectedDateTrades = ({ selectedDate, trades }: { selectedDate: Date | undefined; trades: Trade[] }) => {
+const SelectedDateTrades = ({
+  selectedDate,
+  trades,
+}: {
+  selectedDate: Date | undefined;
+  trades: Trade[];
+}) => {
   if (!selectedDate) {
     return (
       <Card className="w-full">
@@ -135,9 +141,16 @@ const SelectedDateTrades = ({ selectedDate, trades }: { selectedDate: Date | und
     isSameDay(new Date(trade.date), selectedDate)
   );
 
-  const totalProfit = selectedTrades.reduce((sum, trade) => sum + trade.profit, 0);
-  const winningTrades = selectedTrades.filter(trade => trade.profit > 0).length;
-  const losingTrades = selectedTrades.filter(trade => trade.profit < 0).length;
+  const totalProfit = selectedTrades.reduce(
+    (sum, trade) => sum + trade.profit,
+    0
+  );
+  const winningTrades = selectedTrades.filter(
+    (trade) => trade.profit > 0
+  ).length;
+  const losingTrades = selectedTrades.filter(
+    (trade) => trade.profit < 0
+  ).length;
 
   return (
     <Card className="w-full">
@@ -147,7 +160,9 @@ const SelectedDateTrades = ({ selectedDate, trades }: { selectedDate: Date | und
         </CardTitle>
         <div className="flex gap-4 text-sm text-muted-foreground">
           <span>Total: {selectedTrades.length}</span>
-          <span className={totalProfit >= 0 ? "text-green-600" : "text-red-600"}>
+          <span
+            className={totalProfit >= 0 ? "text-green-600" : "text-red-600"}
+          >
             P/L: ${totalProfit.toFixed(2)}
           </span>
           <span className="text-green-600">Wins: {winningTrades}</span>
@@ -168,9 +183,11 @@ const SelectedDateTrades = ({ selectedDate, trades }: { selectedDate: Date | und
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="font-semibold text-lg">{trade.pair}</div>
-                  <div className={`font-bold text-lg ${
-                    trade.profit >= 0 ? "text-green-600" : "text-red-600"
-                  }`}>
+                  <div
+                    className={`font-bold text-lg ${
+                      trade.profit >= 0 ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
                     ${trade.profit.toFixed(2)}
                   </div>
                 </div>
@@ -199,7 +216,7 @@ const SelectedDateTrades = ({ selectedDate, trades }: { selectedDate: Date | und
   );
 };
 
-function TradeCalendarDemo({
+function TradeCalendarWidget({
   className,
   classNames,
   showOutsideDays = true,
@@ -216,18 +233,24 @@ function TradeCalendarDemo({
   const defaultClassNames = getDefaultClassNames();
   const [taskList, setTaskList] = React.useState<Trade[]>(taskData);
   const [selected, setSelected] = React.useState<Date | undefined>(undefined);
-  
+
   React.useEffect(() => {
     const handleDateSelected = (event: CustomEvent) => {
       setSelected(event.detail);
     };
 
-    window.addEventListener('dateSelected', handleDateSelected as EventListener);
+    window.addEventListener(
+      "dateSelected",
+      handleDateSelected as EventListener
+    );
     return () => {
-      window.removeEventListener('dateSelected', handleDateSelected as EventListener);
+      window.removeEventListener(
+        "dateSelected",
+        handleDateSelected as EventListener
+      );
     };
   }, []);
-  
+
   return (
     <TradeContext.Provider value={[taskList, setTaskList]}>
       <TooltipProvider>
@@ -407,7 +430,7 @@ function CalendarDayButton({
   const handleClick = () => {
     if (setTaskList) {
       // Update the selected date in the parent component
-      const event = new CustomEvent('dateSelected', { detail: day.date });
+      const event = new CustomEvent("dateSelected", { detail: day.date });
       window.dispatchEvent(event);
     }
   };
@@ -429,4 +452,4 @@ function CalendarDayButton({
   );
 }
 
-export { TradeCalendarDemo, CalendarDayButton };
+export { TradeCalendarWidget, CalendarDayButton };

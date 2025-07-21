@@ -1,17 +1,37 @@
-//app/protected-route/dashboard/page.tsx
+import React from "react";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import DashboardView from "./dashboard-view";
+import { cookies } from "next/headers";
 
-"use client";
-import React, { memo } from "react";
+async function page() {
+  const queryClient = new QueryClient();
+  const cookieStore = cookies();
 
+  const token = (await cookieStore).get("accessToken");
 
+  if (!token) {
+    // return redirect("/auth/signin");
+  }
 
-const Dashboard = () => {
+  if (token) {
+    // try {
+    //   const session = await verifyJWTServer(token.value);
+    //   if (session.valid === false) return redirect("/auth/signin");
+    // } catch (error) {
+    //   console.log(error);
+    //   redirect("/auth/signin");
+    // }
+  }
+
   return (
-    <div
-      className="w-screen h-screen container mt-12 justify-center space-y-8  items-center m-auto"
-    >
-    </div >
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <DashboardView />
+    </HydrationBoundary>
   );
-};
+}
 
-export default memo(Dashboard);
+export default page;

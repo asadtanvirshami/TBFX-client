@@ -28,6 +28,7 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { handleError } from "@/utils/error-handler";
+import { extractErrorMessage } from "@/utils/error-extractor";
 
 const SignUpForm = () => {
   const router = useRouter();
@@ -73,7 +74,7 @@ const SignUpForm = () => {
             return;
           }
 
-          sessionStorage.setItem("email", res.email);
+          sessionStorage.setItem("email", data.email);
           router.push("/auth/otp");
         },
         onError: (error) => {
@@ -91,7 +92,7 @@ const SignUpForm = () => {
       }
     );
   };
-
+  
   return (
     <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
       <CardHeader>
@@ -179,7 +180,7 @@ const SignUpForm = () => {
 
             {errors.root?.message && (
               <div className="text-xs text-red-600 text-center">
-                {errors.root.message}
+                {extractErrorMessage(errors.root.message)}
               </div>
             )}
 

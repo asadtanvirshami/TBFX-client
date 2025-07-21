@@ -1,13 +1,19 @@
 "use client";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/ui/app-layout/app-sidbar";
 import React from "react";
 import { usePathname } from "next/navigation";
-import ReactQueryClientProvider from "@/provider/react-query";
-import StoreProvider from "@/redux/store-provider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/ui/app-layout/app-sidbar";
 import Header from "../header";
 import Footer from "../footer";
+
+import ReactQueryClientProvider from "@/provider/react-query";
+import StoreProvider from "@/redux/store-provider";
+
+const MemoizedSidebar = React.memo(AppSidebar);
+const MemoizedHeader = React.memo(Header);
+const MemoizedFooter = React.memo(Footer);
 
 export default function MainLayout({
   children,
@@ -35,7 +41,7 @@ export default function MainLayout({
       <StoreProvider>
         <ReactQueryClientProvider>
           <SidebarProvider>
-            <AppSidebar />
+            <MemoizedSidebar />
             <SidebarTrigger />
             {children}
           </SidebarProvider>
@@ -47,9 +53,9 @@ export default function MainLayout({
   return (
     <StoreProvider>
       <ReactQueryClientProvider>
-        <Header />
+        <MemoizedHeader />
         {children}
-        <Footer />
+        <MemoizedFooter />
       </ReactQueryClientProvider>
     </StoreProvider>
   );

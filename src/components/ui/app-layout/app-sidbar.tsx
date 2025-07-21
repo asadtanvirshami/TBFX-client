@@ -24,7 +24,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ModeToggle } from "../theme-provider/toggle-button";
@@ -34,148 +33,91 @@ import light_logo from "../../../../public/assets/light.png";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 
-const data = {
+// ✅ Memoize data outside component
+const sidebarData = {
   user: {
     name: "John Davis",
     email: "john@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: Dock,
-      // isActive: true,
-      // items: [
-      //   {
-      //     title: "History",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Starred",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Settings",
-      //     url: "#",
-      //   },
-      // ],
-    },
+    { title: "Dashboard", url: "#", icon: Dock },
     {
       title: "Operations",
       url: "#",
       icon: Target,
       items: [
-        {
-          title: "Orders", url: "#",
-        },
-        {
-          title: "Portfolios", url: "#",
-        }
-      ]
+        { title: "Orders", url: "#" },
+        { title: "Portfolios", url: "#" },
+      ],
     },
-    {
-      title: "Strategy",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      title: "Trading Journal",
-      url: "#",
-      icon: Book,
-    },
-    {
-      title: "Patterns",
-      url: "#",
-      icon: CandlestickChart,
-    },
-    {
-      title: "Learning",
-      url: "#",
-      icon: BookOpen,
-    },
-    {
-      title: "Rewards",
-      url: "#",
-      icon: Award,
-    },
+    { title: "Strategy", url: "#", icon: Frame },
+    { title: "Trading Journal", url: "#", icon: Book },
+    { title: "Patterns", url: "#", icon: CandlestickChart },
+    { title: "Learning", url: "#", icon: BookOpen },
+    { title: "Rewards", url: "#", icon: Award },
     {
       title: "Tools",
       url: "#",
       icon: Calculator,
-      items: [
-        { title: "Lot Size Calculator", url: "#" },
-      ]
+      items: [{ title: "Lot Size Calculator", url: "#" }],
     },
     {
       title: "Settings",
       url: "#",
       icon: Settings2,
       items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
+        { title: "General", url: "#" },
+        { title: "Team", url: "#" },
+        { title: "Billing", url: "#" },
+        { title: "Limits", url: "#" },
       ],
     },
   ],
   navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
+    { title: "Support", url: "#", icon: LifeBuoy },
+    { title: "Feedback", url: "#", icon: Send },
   ],
-
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const theme = useTheme()
+// ✅ Memoized component
+const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
+  const { theme } = useTheme();
+
+  const logo = React.useMemo(
+    () => (theme === "dark" ? dark_logo : light_logo),
+    [theme]
+  );
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <div className="flex items-center gap-2">
-                <Image src={theme.theme === "dark" ? dark_logo : light_logo} alt="Logo" width={50} height={50} />
-                <div className="grid flex-1 text-left text-sm leading-tight font-[family-name:var(--font-poppins)]">
-                  <span className="font-semibold">BackTrading</span>
-                </div>
+            <div className="flex items-center">
+              <Image src={logo} alt="Logo" width={50} height={50} />
+              <div className="grid flex-1 w-full text-left leading-tight font-[family-name:var(--font-poppins)]">
+                <span className="font-semibold text-xl bg-gradient-to-r from-pink-500 to-pink-400 bg-clip-text text-transparent">
+                  BackTesting
+                </span>
               </div>
-            </SidebarMenuButton>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
-        <div className="row gap-2 flex justify-evenly">
-          <ModeToggle />
-          <ModeToggle />
-          <ModeToggle />
-        </div>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={sidebarData.navMain} />
+        <ModeToggle />
+        <NavSecondary items={sidebarData.navSecondary} className="mt-auto" />
       </SidebarContent>
+
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={sidebarData.user} />
       </SidebarFooter>
     </Sidebar>
   );
-}
+};
+
+// ✅ Export memoized component
+export const AppSidebar = React.memo(AppSidebarComponent);

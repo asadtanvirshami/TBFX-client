@@ -19,11 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   //       </div>
   //     </div>
   //   </div>
-  return (
-    <MainLayout>
-      <div>{children}</div>
-    </MainLayout>
-  )
+  return <MainLayout>{children}</MainLayout>;
 };
 
 export default memo(Layout);
