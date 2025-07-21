@@ -3,7 +3,7 @@ import { getCsrfToken } from "@/lib/csrf";
 
 const VERSION = "v1";
 const PRIVACY = "public";
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:80";
 console.log(BASE_URL);
 
 const api = axios.create({

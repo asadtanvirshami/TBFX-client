@@ -92,7 +92,7 @@ const SignUpForm = () => {
       }
     );
   };
-
+  
   return (
     <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
       <CardHeader>

@@ -67,12 +67,14 @@ const data = {
       icon: Target,
       items: [
         {
-          title: "Orders", url: "#",
+          title: "Orders",
+          url: "#",
         },
         {
-          title: "Portfolios", url: "#",
-        }
-      ]
+          title: "Portfolios",
+          url: "#",
+        },
+      ],
     },
     {
       title: "Strategy",
@@ -103,9 +105,7 @@ const data = {
       title: "Tools",
       url: "#",
       icon: Calculator,
-      items: [
-        { title: "Lot Size Calculator", url: "#" },
-      ]
+      items: [{ title: "Lot Size Calculator", url: "#" }],
     },
     {
       title: "Settings",
@@ -143,24 +143,26 @@ const data = {
       icon: Send,
     },
   ],
-
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const theme = useTheme()
+  const theme = useTheme();
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <div className="flex items-center gap-2">
-                <Image src={theme.theme === "dark" ? dark_logo : light_logo} alt="Logo" width={50} height={50} />
-                <div className="grid flex-1 text-left text-sm leading-tight font-[family-name:var(--font-poppins)]">
-                  <span className="font-semibold">BackTrading</span>
-                </div>
+            <div className="flex items-center">
+              <Image
+                src={theme.theme === "dark" ? dark_logo : light_logo}
+                alt="Logo"
+                width={50}
+                height={50}
+              />
+              <div className="grid flex-1 w-full text-left leading-tight font-[family-name:var(--font-poppins)]">
+                <span className="font-semibold text-xl bg-gradient-to-r from-pink-500 to-pink-400 bg-clip-text text-transparent">BackTesting</span>
               </div>
-            </SidebarMenuButton>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
         <div className="row gap-2 flex justify-evenly">

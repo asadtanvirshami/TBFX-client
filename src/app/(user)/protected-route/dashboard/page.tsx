@@ -1,21 +1,41 @@
-//app/protected-route/dashboard/page.tsx
+import React from "react";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { redirect } from "next/navigation";
+import DashboardView from "./dashboard-view";
+import { cookies } from "next/headers";
+import { verifyJWTServer } from "@/lib/auth/verifyJWTServer";
 
-"use client";
-import { EventCalendar } from "@/components/ui/event-calendar";
-import React, { memo } from "react";
+async function page() {
+  const queryClient = new QueryClient();
+  const cookieStore = cookies();
 
+  const token = (await cookieStore).get("accessToken");
 
+  if (!token) {
+    // return redirect("/auth/signin");
+  }
 
-const Dashboard = () => {
+  if (token) {
+    // try {
+    //   const session = await verifyJWTServer(token.value);
+    //   if (session.valid === false) return redirect("/auth/signin");
+    // } catch (error) {
+    //   console.log(error);
+    //   redirect("/auth/signin");
+    // }
+  }
+
   return (
-    <div
-      className="w-screen h-screen container mt-12 justify-center space-y-8 items-center m-auto"
-    >
-      <div className="flex flex-col p-3 items-center justify-center bg-red-400">
-        <EventCalendar taskData={Trade}/>
-      </div>
-    </div >
+    <>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <DashboardView />
+      </HydrationBoundary>
+    </>
   );
-};
+}
 
-export default memo(Dashboard);
+export default page;
