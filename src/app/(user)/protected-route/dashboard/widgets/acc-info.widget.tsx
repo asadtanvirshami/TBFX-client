@@ -5,58 +5,66 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { TradeStatsResponse } from "@/types/task-type";
 import React from "react";
 
-interface AccInfoData {
+interface TradeInfoCardProps {
   label: string;
-  value: string;
+  value: string | number;
   description?: string;
 }
 
-const accountData: AccInfoData[] = [
-  {
-    label: "Most Traded Pair",
-    value: "EURUSD",
-    description: "Highest number of trades",
-  },
-  {
-    label: "Total Trades",
-    value: "142",
-    description: "In current month",
-  },
-  {
-    label: "Total Profit",
-    value: "$3,250",
-    description: "Net profit this month",
-  },
-  {
-    label: "Avg Profit / Trade",
-    value: "$22.89",
-    description: "Average per winning trade",
-  },
-];
+const TradeInfoCard = ({ label, description, value }: TradeInfoCardProps) => {
+  return (
+    <Card className="shadow-sm border">
+      <CardHeader>
+        <CardTitle className="text-base text-muted-foreground">
+          {label}
+        </CardTitle>
 
-const AccInfoWidget = () => {
+        <CardDescription className="text-xs">{description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-semibold">{value}</div>
+      </CardContent>
+    </Card>
+  );
+};
+
+interface TradeStatsResponseProps {
+  data: TradeStatsResponse;
+}
+
+const AccInfoWidget = ({
+  data: {
+    mostTradedPair,
+    totalTradesCurrentMonth,
+    totalNetProfit,
+    avgProfitPerTrade,
+  },
+}: TradeStatsResponseProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-      {accountData.map((item, index) => (
-        // <Card key={index} className="shadow-sm border border-muted/40">
-        <Card key={index} className="shadow-sm border">
-          <CardHeader>
-            <CardTitle className="text-base text-muted-foreground">
-              {item.label}
-            </CardTitle>
-            {item.description && (
-              <CardDescription className="text-xs">
-                {item.description}
-              </CardDescription>
-            )}
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-semibold">{item.value}</div>
-          </CardContent>
-        </Card>
-      ))}
+      <TradeInfoCard
+        label="Most Traded Pair"
+        value={mostTradedPair || "No Pair"}
+        description="Highest number of trades"
+      />
+      <TradeInfoCard
+        label="Most Trades"
+        value={totalTradesCurrentMonth || "0"}
+        description="In current month"
+      />
+      <TradeInfoCard
+        label="Avg Profit / Trade"
+        value={avgProfitPerTrade || "0"}
+        description="Average per winning trade"
+      />
+      <TradeInfoCard
+        label="Total Net Profit"
+        value={totalNetProfit || "0"}
+        description="Net profit this month"
+      />
     </div>
   );
 };

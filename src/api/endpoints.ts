@@ -16,4 +16,9 @@ export const apiEndpoints = {
     me: "/users/me",
     one: (id: string) => `/users/${id}`,
   },
+  trades: {
+    base: "/trade",
+    get: "/trade/get",
+    stats: "/trade/get-stats",
+  },
 };
