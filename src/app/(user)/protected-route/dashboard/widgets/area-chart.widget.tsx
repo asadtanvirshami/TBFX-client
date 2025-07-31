@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { transformTradesToChartData } from "@/utils/transformTradesToAreaChartData";
+import { transformTradesToChartData } from "@/utils/transforms_areachart_data";
 import { TradeRaw } from "@/types/trade-type/type";
 
 // Static Config
@@ -34,8 +34,6 @@ const chartConfig: ChartConfig = {
   loss: { label: "Loss", color: "hsl(var(--chart-2))" },
 };
 
-// Static Chart Data (already done, great)
-const chartData = [{ date: "2024-04-01", profit: 222, loss: 150 }];
 interface AreaChartWidgetProps {
   data: TradeRaw[];
 }

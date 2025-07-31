@@ -1,7 +1,7 @@
 import { DistributionPieChart } from "@/components/ui/distribution-piechart";
-import {TradeRaw } from "@/types/trade-type/type";
+import { TradeRaw } from "@/types/trade-type/type";
 import React, { memo } from "react";
-import { transformTradesToPieChartData } from "@/utils/transformTradesToPieChartData";
+import { transformTradesToPieChartData } from "@/utils/transform_piechart_data";
 
 interface ProfitDistributionWidgetProps {
   data: TradeRaw[];

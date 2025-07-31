@@ -1,31 +1,10 @@
 import { TradeRaw } from "@/types/trade-type/type";
 
-type Trade = {
-  pair: string;
-  profit: number;
-  // add any other relevant fields if needed
-};
 
 type PieChartTradeData = {
   pair: string;
   profit: number;
   fill: string;
-};
-
-const chartColors = [
-  "var(--chart-1)",
-  "var(--chart-2)",
-  "var(--chart-3)",
-  "var(--chart-4)",
-  "var(--chart-5)",
-  "var(--chart-6)",
-  "var(--chart-7)",
-  "var(--chart-8)",
-];
-
-type RawTrade = {
-  symbol: string;
-  profit: number;
 };
 
 export function transformTradesToPieChartData(
