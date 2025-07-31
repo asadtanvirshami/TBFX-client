@@ -24,7 +24,7 @@ import { LucideLoaderCircle } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { loginSuccess } from "@/redux/actions/user-action";
+import { loginSuccess } from "@/redux/slices/user/user-slice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { GoogleCredentialResponse, GoogleLogin } from "@react-oauth/google";
@@ -91,6 +91,7 @@ export const SignInForm = () => {
 
           const result = await refetch();
           if (result.isError) return;
+          console.log(result);
 
           if (result.data.valid && result.data.user) {
             dispatch(loginSuccess(result.data.user));

@@ -91,7 +91,7 @@ export default function ForexNewsCarousel() {
                 mode="single"
                 selected={selectedDate!}
                 onSelect={setSelectedDate}
-                required={true} 
+                required={true}
               />
             </PopoverContent>
           </Popover>
