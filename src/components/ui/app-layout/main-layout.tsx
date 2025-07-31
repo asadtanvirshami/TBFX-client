@@ -10,6 +10,7 @@ import Footer from "../footer";
 
 import ReactQueryClientProvider from "@/provider/react-query";
 import StoreProvider from "@/redux/store-provider";
+import AppHeader from "./app-header";
 
 const MemoizedSidebar = React.memo(AppSidebar);
 const MemoizedHeader = React.memo(Header);
@@ -42,8 +43,10 @@ export default function MainLayout({
         <ReactQueryClientProvider>
           <SidebarProvider>
             <MemoizedSidebar />
-            <SidebarTrigger />
-            {children}
+            <main className="w-full flex-col flex h-full">
+              <AppHeader />
+              {children}
+            </main>
           </SidebarProvider>
         </ReactQueryClientProvider>
       </StoreProvider>

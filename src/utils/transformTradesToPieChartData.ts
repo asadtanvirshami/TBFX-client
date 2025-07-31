@@ -1,3 +1,5 @@
+import { TradeRaw } from "@/types/trade-type/type";
+
 type Trade = {
   pair: string;
   profit: number;
@@ -21,21 +23,42 @@ const chartColors = [
   "var(--chart-8)",
 ];
 
-export function transformTradesToPieChartData(
-  trades: Trade[]
-): PieChartTradeData[] {
-  const profitByPair: Record<string, number> = {};
+type RawTrade = {
+  symbol: string;
+  profit: number;
+};
 
-  for (const trade of trades) {
-    if (!profitByPair[trade.pair]) {
-      profitByPair[trade.pair] = 0;
-    }
-    profitByPair[trade.pair] += trade.profit;
+export function transformTradesToPieChartData(
+  rawTrades: TradeRaw[]
+): PieChartTradeData[] {
+  const COLORS = [
+    "#f87171",
+    "#60a5fa",
+    "#34d399",
+    "#fbbf24",
+    "#a78bfa",
+    "#f472b6",
+    "#facc15",
+    "#38bdf8",
+    "#c084fc",
+    "#4ade80",
+  ];
+
+  const pairMap = new Map<string, number>();
+  const result: PieChartTradeData[] = [];
+
+  for (const trade of rawTrades) {
+    const currentProfit = pairMap.get(trade.symbol) ?? 0;
+    pairMap.set(trade.symbol, currentProfit + trade.profit);
   }
 
-  return Object.entries(profitByPair).map(([pair, profit], index) => ({
-    pair,
-    profit,
-    fill: chartColors[index % chartColors.length],
-  }));
+  Array.from(pairMap.entries()).forEach(([pair, profit], index) => {
+    result.push({
+      pair,
+      profit: parseFloat(profit.toFixed(2)),
+      fill: COLORS[index % COLORS.length],
+    });
+  });
+
+  return result;
 }

@@ -23,6 +23,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useGetNews } from "@/hooks/news/queries";
+import { NewsItem } from "@/types/news-type/type";
 
 const forexNews = [
   {
@@ -56,11 +58,22 @@ const forexNews = [
 ];
 
 export default function ForexNewsCarousel() {
+  const [limit, setlimit] = useState(4);
+  const [page, setPage] = useState(1);
+
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  const { data, isLoading, isError, error } = useGetNews("USDJPY", page, limit);
+
+  console.log(data);
 
   const handleTodayClick = () => {
     setSelectedDate(new Date());
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   const filteredNews = selectedDate
     ? forexNews.filter(
@@ -91,7 +104,7 @@ export default function ForexNewsCarousel() {
                 mode="single"
                 selected={selectedDate!}
                 onSelect={setSelectedDate}
-                required={true} 
+                required={true}
               />
             </PopoverContent>
           </Popover>

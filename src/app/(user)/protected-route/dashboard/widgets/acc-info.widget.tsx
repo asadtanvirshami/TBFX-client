@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -6,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TradeStatsResponse } from "@/types/task-type";
-import React from "react";
+import React, { memo } from "react";
 
 interface TradeInfoCardProps {
   label: string;
@@ -14,35 +16,37 @@ interface TradeInfoCardProps {
   description?: string;
 }
 
-const TradeInfoCard = ({ label, description, value }: TradeInfoCardProps) => {
-  return (
-    <Card className="shadow-sm border">
-      <CardHeader>
-        <CardTitle className="text-base text-muted-foreground">
-          {label}
-        </CardTitle>
-
-        <CardDescription className="text-xs">{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-semibold">{value}</div>
-      </CardContent>
-    </Card>
-  );
-};
+const TradeInfoCard = memo(
+  ({ label, description, value }: TradeInfoCardProps) => {
+    return (
+      <Card className="shadow-sm border">
+        <CardHeader>
+          <CardTitle className="text-base text-muted-foreground">
+            {label}
+          </CardTitle>
+          <CardDescription className="text-xs">{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-2xl font-semibold">{value}</div>
+        </CardContent>
+      </Card>
+    );
+  }
+);
+TradeInfoCard.displayName = "TradeInfoCard";
 
 interface TradeStatsResponseProps {
   data: TradeStatsResponse;
 }
 
-const AccInfoWidget = ({
+const AccInfoWidget = memo(function AccInfoWidget({
   data: {
     mostTradedPair,
     totalTradesCurrentMonth,
     totalNetProfit,
     avgProfitPerTrade,
   },
-}: TradeStatsResponseProps) => {
+}: TradeStatsResponseProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <TradeInfoCard
@@ -67,6 +71,6 @@ const AccInfoWidget = ({
       />
     </div>
   );
-};
+});
 
 export default AccInfoWidget;
