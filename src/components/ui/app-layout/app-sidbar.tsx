@@ -32,8 +32,9 @@ import dark_logo from "../../../../public/assets/dark.png";
 import light_logo from "../../../../public/assets/light.png";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
-// ✅ Memoize data outside component
 const sidebarData = {
   user: {
     name: "John Davis",
@@ -80,9 +81,9 @@ const sidebarData = {
   ],
 };
 
-// ✅ Memoized component
 const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
   const { theme } = useTheme();
+  const user = useSelector((state: RootState) => state.user.user);
 
   const logo = React.useMemo(
     () => (theme === "dark" ? dark_logo : light_logo),
@@ -90,7 +91,7 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
   );
 
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar className="shadow-md " variant="inset" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -113,11 +114,18 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser user={sidebarData.user} />
+        {user ? (
+          <NavUser
+            user={{
+              name: user.firstName + " " + user.lastName,
+              email: user.email,
+              avatar: user.avatar || "",
+            }}
+          />
+        ) : null}
       </SidebarFooter>
     </Sidebar>
   );
 };
 
-// ✅ Export memoized component
 export const AppSidebar = React.memo(AppSidebarComponent);

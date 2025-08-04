@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import { Pie, PieChart } from "recharts";
 import {
   ChartConfig,
@@ -25,16 +26,19 @@ interface DistributionPieChartProps {
   chartData: PieChartTradeData[];
 }
 
-export function DistributiionPieChart({
+const DistributionPieChart = memo(function DistributionPieChart({
   chartData,
 }: DistributionPieChartProps) {
-  const chartConfig: ChartConfig = chartData.reduce((config, item) => {
-    config[item.pair] = {
-      label: item.pair,
-      color: item.fill,
-    };
-    return config;
-  }, {} as ChartConfig);
+  const filteredData = chartData.filter((d) => d.profit > 0);
+  const chartConfig: ChartConfig = useMemo(() => {
+    return chartData.reduce((config, item) => {
+      config[item.pair] = {
+        label: item.pair,
+        color: item.fill,
+      };
+      return config;
+    }, {} as ChartConfig);
+  }, [chartData]);
 
   return (
     <Card>
@@ -48,19 +52,32 @@ export function DistributiionPieChart({
       </CardHeader>
 
       <CardContent className="pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[300px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie data={chartData} dataKey="profit" nameKey="pair" stroke="0" />
-          </PieChart>
-        </ChartContainer>
+        {chartData.length > 0 ? (
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[300px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={filteredData}
+                dataKey="profit"
+                nameKey="pair"
+                stroke="0"
+              />
+            </PieChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex items-center justify-center">
+            <p>No data to present</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
-}
+});
+
+export { DistributionPieChart };

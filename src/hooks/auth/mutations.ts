@@ -67,3 +67,11 @@ export const useAccountRecovery = () =>
         .post(apiEndpoints.auth.account_recovery, sanitizeFlatStrings(input))
         .then((res) => res.data),
   });
+
+export const useLogout = () =>
+  useMutation({
+    mutationFn: () =>
+      api
+        .post(apiEndpoints.auth.logout)
+        .then((res) => res.data),
+  });

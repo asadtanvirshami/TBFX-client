@@ -3,13 +3,14 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-layout/app-sidbar";
 import Header from "../header";
 import Footer from "../footer";
 
 import ReactQueryClientProvider from "@/provider/react-query";
 import StoreProvider from "@/redux/store-provider";
+import AppHeader from "./app-header";
 
 const MemoizedSidebar = React.memo(AppSidebar);
 const MemoizedHeader = React.memo(Header);
@@ -42,8 +43,10 @@ export default function MainLayout({
         <ReactQueryClientProvider>
           <SidebarProvider>
             <MemoizedSidebar />
-            <SidebarTrigger />
-            {children}
+            <main className="w-full flex-col flex h-full">
+              <AppHeader />
+              {children}
+            </main>
           </SidebarProvider>
         </ReactQueryClientProvider>
       </StoreProvider>

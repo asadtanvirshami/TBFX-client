@@ -2,7 +2,8 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, Persistor } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 // Reducers
-import userReducer from "./reducers/user-reducer";
+import userReducer from "./slices/user/user-slice";
+import accountReducer from "./slices/trade-account/trade_account-slice";
 
 // Persist config for redux-persist
 const persistConfig = {
@@ -15,6 +16,7 @@ const persistedUserReducer = persistReducer(persistConfig, userReducer);
 // Root reducer
 const rootReducer = combineReducers({
   user: persistedUserReducer,
+  trade_account: accountReducer,
 });
 
 // Configuring the Redux store
@@ -32,6 +34,7 @@ const persistor = persistStore(store);
 
 // Explicitly define types for store and persistor
 export { store, persistor };
+export type RootState = ReturnType<typeof store.getState>;
 export type AppStore = typeof store; // Type for store
 export type AppPersistor = Persistor; // Type for persistor
 export type AppDispatch = typeof store.dispatch; // This gets the dispatch type from the store
