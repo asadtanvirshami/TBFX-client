@@ -26,6 +26,7 @@ async function page() {
 
     if (!session.valid) return redirect("/auth/signin");
   } catch (error) {
+    console.error(error);
     return redirect("/auth/signin");
   }
 

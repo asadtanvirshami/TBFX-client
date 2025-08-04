@@ -1,14 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
-
-interface TradeAccount {
-  id: string;
-  accountId: string;
-  investor_password: string;
-  broker_server: string;
-  type: string;
-}
-
 interface AccountState {
   account: string | null;
   error: string | null;
