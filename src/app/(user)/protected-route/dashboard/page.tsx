@@ -28,7 +28,7 @@ async function page() {
     console.log("No token found", session);
   } catch (error) {
     console.error(error);
-    return redirect("/auth/signin");
+    // return redirect("/auth/signin");
   }
 
   return (

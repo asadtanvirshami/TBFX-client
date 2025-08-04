@@ -90,6 +90,7 @@ export const SignInForm = () => {
           }
 
           const result = await refetch();
+          console.log(result, "result");
           if (result.isError) return;
 
           if (result.data.valid && result.data.user) {
