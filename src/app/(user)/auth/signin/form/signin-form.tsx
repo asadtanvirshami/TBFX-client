@@ -91,7 +91,6 @@ export const SignInForm = () => {
 
           const result = await refetch();
           if (result.isError) return;
-          console.log(result);
 
           if (result.data.valid && result.data.user) {
             dispatch(loginSuccess(result.data.user));
