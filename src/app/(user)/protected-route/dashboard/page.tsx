@@ -16,6 +16,7 @@ async function page() {
   const token = (await cookieStore).get("accessToken");
 
   if (!token || !token.value || token.value.split(".").length !== 3) {
+    console.log("No token found");
     return redirect("/auth/signin");
   }
 
