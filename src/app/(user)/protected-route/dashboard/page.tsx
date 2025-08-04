@@ -15,15 +15,17 @@ async function page() {
 
   const token = (await cookieStore).get("accessToken");
 
-  if (!token || !token.value || token.value.split(".").length !== 3) {
+  if (!token || !token.value) {
     console.log("No token found");
     return redirect("/auth/signin");
   }
 
   try {
     const session = await verifyJWTServer(token.value);
+    console.log(session);
 
     if (!session.valid) return redirect("/auth/signin");
+    console.log("No token found", session);
   } catch (error) {
     console.error(error);
     return redirect("/auth/signin");
