@@ -9,27 +9,26 @@ import { cookies } from "next/headers";
 import { verifyJWTServer } from "@/lib/auth/verifyJWTServer";
 import { redirect } from "next/navigation";
 
-async function page() {
+export default async function Page() {
   const queryClient = new QueryClient();
-  const cookieStore = cookies();
 
-  const token = (await cookieStore).get("accessToken");
-  console.log(token);
-  
+  const cookieStore = await cookies(); 
+  const token = cookieStore.get("accessToken");
+
   if (!token || !token.value) {
     console.log("No token found");
-    // return redirect("/auth/signin");
-  } else {
-    try {
-      const session = await verifyJWTServer(token.value);
-      console.log(session);
+    return redirect("/auth/signin");
+  }
 
-      if (!session.valid) return redirect("/auth/signin");
-      console.log("No token found", session);
-    } catch (error) {
-      console.error(error);
-      // return redirect("/auth/signin");
+  try {
+    const session = await verifyJWTServer(token.value);
+    if (!session.valid) {
+      console.log("Invalid token");
+      return redirect("/auth/signin");
     }
+  } catch (error) {
+    console.error("JWT verification failed:", error);
+    return redirect("/auth/signin");
   }
 
   return (
@@ -38,5 +37,3 @@ async function page() {
     </HydrationBoundary>
   );
 }
-
-export default page;
