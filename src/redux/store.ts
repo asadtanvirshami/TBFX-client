@@ -3,6 +3,7 @@ import { persistStore, persistReducer, Persistor } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 // Reducers
 import userReducer from "./slices/user/user-slice";
+import accountReducer from "./slices/trade-account/trade_account-slice";
 
 // Persist config for redux-persist
 const persistConfig = {
@@ -15,6 +16,7 @@ const persistedUserReducer = persistReducer(persistConfig, userReducer);
 // Root reducer
 const rootReducer = combineReducers({
   user: persistedUserReducer,
+  trade_account: accountReducer,
 });
 
 // Configuring the Redux store

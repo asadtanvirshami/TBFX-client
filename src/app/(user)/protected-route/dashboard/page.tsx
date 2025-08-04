@@ -17,15 +17,15 @@ async function page() {
 
   const token = (await cookieStore).get("accessToken");
 
-  if (!token) {
+  if (!token || !token.value || token.value.split(".").length !== 3) {
     return redirect("/auth/signin");
   }
 
   try {
     const session = await verifyJWTServer(token.value);
+
     if (!session.valid) return redirect("/auth/signin");
   } catch (error) {
-    console.log(error);
     return redirect("/auth/signin");
   }
 

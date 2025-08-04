@@ -47,6 +47,8 @@ const AreaChartWidget = React.memo(({ data }: AreaChartWidgetProps) => {
     if (data && data.length > 0) {
       const transformed = transformTradesToChartData(data);
       setChartData(transformed);
+    } else {
+      setChartData([]);
     }
   }, [data]);
 

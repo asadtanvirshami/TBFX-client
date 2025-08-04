@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { SidebarTrigger } from "../sidebar";
 import {
   Select,
@@ -9,6 +11,71 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useGetAccounts } from "@/hooks/trade_account/queries";
+import { TradeAcc } from "@/types/account-type/type";
+import { useAccountSwitch } from "@/hooks/trade_account/mutations";
+import { useDispatch } from "react-redux";
+import { setSelectedAccount } from "@/redux/slices/trade-account/trade_account-slice";
+
+const SwitchAccountSelector = () => {
+  const dispatch = useDispatch();
+  const selectAccount = useAccountSwitch();
+  const {
+    data: accounts,
+    isLoading: isLoadingAccount,
+    isError: isErrorAccount,
+  } = useGetAccounts();
+
+  useEffect(() => {
+    if (accounts?.metadata?.id) {
+      dispatch(setSelectedAccount({ id: accounts.metadata.id }));
+    }
+  }, [accounts?.metadata?.id]);
+
+  const handleAccountSwitch = (accountId: string) => {
+    selectAccount.mutate(
+      { id: accountId },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          dispatch(setSelectedAccount({ id: data.metadata.id }));
+        },
+      }
+    );
+  };
+
+  if (isLoadingAccount || selectAccount.isPending)
+    return (
+      <div className="w-[180px] h-10 mx-2 my-2 rounded-md bg-gray-200 animate-pulse" />
+    );
+
+  if (isErrorAccount)
+    return <div className="w-[180px] h-10 mx-2 my-2 rounded-md bg-gray-200" />;
+
+  return (
+    <div>
+      <Select onValueChange={(value) => handleAccountSwitch(value)}>
+        <SelectTrigger className="w-[180px] mx-2 my-2">
+          <SelectValue placeholder="Select a Account" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Accounts</SelectLabel>
+            {accounts?.data?.map((account: TradeAcc) => (
+              <SelectItem
+                key={account.accountId}
+                value={account.id}
+                className="capitalize"
+              >
+                {account.accountId}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
 
 const AppHeader = () => {
   return (
@@ -18,22 +85,11 @@ const AppHeader = () => {
           <div>
             <SidebarTrigger />
           </div>
-          <Select>
-            <SelectTrigger className="w-[180px] mx-2 my-2">
-              <SelectValue placeholder="Select a Account" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Accounts</SelectLabel>
-                <SelectItem value="apple">233123</SelectItem>
-                <SelectItem value="banana">22344</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <SwitchAccountSelector />
         </div>
       </div>
     </div>
   );
 };
 
-export default AppHeader;
+export default React.memo(AppHeader);

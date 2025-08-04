@@ -35,7 +35,6 @@ import { useTheme } from "next-themes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
-// ✅ Memoize data outside component
 const sidebarData = {
   user: {
     name: "John Davis",
@@ -82,7 +81,6 @@ const sidebarData = {
   ],
 };
 
-// ✅ Memoized component
 const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
   const { theme } = useTheme();
   const user = useSelector((state: RootState) => state.user.user);
@@ -130,5 +128,4 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
   );
 };
 
-// ✅ Export memoized component
 export const AppSidebar = React.memo(AppSidebarComponent);

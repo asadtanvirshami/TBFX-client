@@ -41,9 +41,7 @@ const authSlice = createSlice({
       state.error = action.payload;
       state.isAuthenticated = false;
     },
-    logout(state) {
-      Cookies.remove("user");
-      Cookies.remove("token");
+    logoutUser(state) {
       state.user = null;
       state.error = null;
       state.isAuthenticated = false;
@@ -51,7 +49,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginSuccess, updateProfile, loginFailure, logout } =
+export const { loginSuccess, updateProfile, loginFailure, logoutUser } =
   authSlice.actions;
 
 export default authSlice.reducer;

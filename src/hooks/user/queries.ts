@@ -11,7 +11,7 @@ export const useUser = () => {
     refetch,
   } = useQuery({
     queryKey: ["me"],
-    queryFn: () => api.get(apiEndpoints.auth.me).then((res) => res.data),
+    queryFn: () => api.get(apiEndpoints.users.me).then((res) => res.data),
     retry: false,
     refetchOnWindowFocus: false,
   });

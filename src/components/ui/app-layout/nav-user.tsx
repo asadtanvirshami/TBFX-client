@@ -6,6 +6,7 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
+  Settings,
   Sparkles,
 } from "lucide-react";
 
@@ -26,8 +27,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useDispatch } from "react-redux";
-import { logout } from "@/redux/slices/user/user-slice";
 import { useRouter } from "next/navigation";
+import { logoutAccount } from "@/redux/slices/trade-account/trade_account-slice";
+import { useLogout } from "@/hooks/auth/mutations";
+import { logoutUser } from "@/redux/slices/user/user-slice";
+import { queryClient } from "@/provider/react-query";
 
 export interface SafeUser {
   name: string;
@@ -39,6 +43,21 @@ export function NavUser({ user }: { user: SafeUser }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const dispatch = useDispatch();
+  const logout = useLogout();
+
+  const handleLogout = async () => {
+    try {
+      await logout.mutateAsync();
+      await queryClient.clear();
+
+      dispatch(logoutAccount());
+      dispatch(logoutUser());
+
+      router.push("/auth/signin");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -91,8 +110,8 @@ export function NavUser({ user }: { user: SafeUser }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
+              <DropdownMenuItem onClick={() => router.push("protected-route/profile/:id")}>
+                <Settings />
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>
@@ -105,12 +124,7 @@ export function NavUser({ user }: { user: SafeUser }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                dispatch(logout());
-                router.push("/");
-              }}
-            >
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>
