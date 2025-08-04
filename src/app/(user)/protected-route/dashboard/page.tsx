@@ -22,6 +22,7 @@ async function page() {
 
   try {
     const session = await verifyJWTServer(token.value);
+    console.log(session);
 
     if (!session.valid) return redirect("/auth/signin");
     console.log("No token found", session);
