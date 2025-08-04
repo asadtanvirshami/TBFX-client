@@ -25,8 +25,8 @@ const SwitchAccountSelector = () => {
     isLoading: isLoadingAccount,
     isError: isErrorAccount,
   } = useGetAccounts();
-  console.log(accounts, "accounts");
-  
+  console.log(accounts, "accounts", isErrorAccount);
+
   useEffect(() => {
     if (accounts?.metadata?.id) {
       dispatch(setSelectedAccount({ id: accounts.metadata.id }));

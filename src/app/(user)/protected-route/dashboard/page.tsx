@@ -14,21 +14,22 @@ async function page() {
   const cookieStore = cookies();
 
   const token = (await cookieStore).get("accessToken");
-
+  console.log(token);
+  
   if (!token || !token.value) {
     console.log("No token found");
-    return redirect("/auth/signin");
-  }
+    // return redirect("/auth/signin");
+  } else {
+    try {
+      const session = await verifyJWTServer(token.value);
+      console.log(session);
 
-  try {
-    const session = await verifyJWTServer(token.value);
-    console.log(session);
-
-    if (!session.valid) return redirect("/auth/signin");
-    console.log("No token found", session);
-  } catch (error) {
-    console.error(error);
-    return redirect("/auth/signin");
+      if (!session.valid) return redirect("/auth/signin");
+      console.log("No token found", session);
+    } catch (error) {
+      console.error(error);
+      // return redirect("/auth/signin");
+    }
   }
 
   return (
