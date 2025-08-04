@@ -12,12 +12,12 @@ import { redirect } from "next/navigation";
 export default async function Page() {
   const queryClient = new QueryClient();
 
-  const cookieStore = await cookies(); 
+  const cookieStore = await cookies();
   const token = cookieStore.get("accessToken");
 
   if (!token || !token.value) {
     console.log("No token found");
-    return redirect("/auth/signin");
+    redirect("/auth/signin");
   }
 
   try {
