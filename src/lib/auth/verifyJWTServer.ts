@@ -11,7 +11,7 @@ export const verifyJWTServer = async (token: string) => {
     `${BASE_URL}/${PRIVACY}/api/${VERSION}${apiEndpoints.auth.verifyJWT}`,
     {
       headers: {
-        Cookie: `accessToken=${token}`,
+        Authorization: `Bearer ${token}`,
       },
       withCredentials: true,
     }
