@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 export default async function DashboardPage() {
   const cookieStore = await cookies(); // ✅ Await the cookies() call
   const accessToken = cookieStore.get("accessToken")?.value;
-
+  console.log(accessToken);
+  
   if (!accessToken) {
     redirect("/auth/signin"); // If not logged in, redirect
   }
