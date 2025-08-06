@@ -32,6 +32,8 @@ import { handleError } from "@/utils/error-handler";
 import { useUser } from "@/hooks/user/use-user";
 import { useSignin } from "@/hooks/auth/use-auth";
 import { extractErrorMessage } from "@/utils/error-extractor";
+import Cookies from "js-cookie";
+
 /**
  * SignInForm
  *
@@ -94,6 +96,11 @@ export const SignInForm = () => {
           if (result.isError) return;
 
           if (result.data.valid && result.data.user) {
+            Cookies.set("accessToken", data.accessToken, {
+              sameSite: "lax",
+              path: "/",
+              expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+            });
             dispatch(loginSuccess(result.data.user));
             router.push("/protected-route/dashboard");
             form.reset();
