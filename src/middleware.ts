@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyJWTServer } from "@/lib/auth/verifyJWTServer";
 
+
 const PUBLIC_ROUTES = ["/login", "/signup", "/"];
 const PROTECTED_PREFIXES = ["/dashboard", "/protected-route"];
 
 export async function middleware(req: NextRequest) {
+  const token = req.cookies.get("accessToken")?.value;
+  console.log("Token from cookie:", token);
+
   // Always allow public routes
   if (PUBLIC_ROUTES.includes(req.nextUrl.pathname)) {
     return NextResponse.next();
@@ -13,13 +17,14 @@ export async function middleware(req: NextRequest) {
   let session = null;
 
   // Try to verify token
-
-  try {
-    session = await verifyJWTServer();
-    console.log(session);
-  } catch (err) {
-    console.error("JWT verification failed:", err); // Useful for debugging
-    // Continue with session = null
+  if (token) {
+    try {
+      session = await verifyJWTServer(token);
+      console.log(session);
+    } catch (err) {
+      console.error("JWT verification failed:", err); // Useful for debugging
+      // Continue with session = null
+    }
   }
 
   // Handle protected routes
