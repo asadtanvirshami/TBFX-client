@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "@/schemas/auth-schema/schema";
@@ -32,7 +34,6 @@ import { handleError } from "@/utils/error-handler";
 import { useUser } from "@/hooks/user/use-user";
 import { useSignin } from "@/hooks/auth/use-auth";
 import { extractErrorMessage } from "@/utils/error-extractor";
-import Cookies from "js-cookie";
 
 /**
  * SignInForm
@@ -90,20 +91,15 @@ export const SignInForm = () => {
             });
             return;
           }
-
+          
           const result = await refetch();
-          console.log(result, "result");
+
           if (result.isError) return;
 
-          if (result.data.valid && result.data.user) {
-            Cookies.set("accessToken", data.accessToken, {
-              sameSite: "lax",
-              path: "/",
-              expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-            });
+          if (result.data.valid === true) {
             dispatch(loginSuccess(result.data.user));
-            router.push("/protected-route/dashboard");
             form.reset();
+            router.push("/protected-route/dashboard");
           }
         },
         onError: (error) => {
