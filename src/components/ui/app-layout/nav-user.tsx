@@ -53,6 +53,7 @@ export function NavUser({ user }: { user: SafeUser }) {
       dispatch(logoutUser());
 
       router.push("/auth/signin");
+      
     } catch (error) {
       console.error(error);
     }
