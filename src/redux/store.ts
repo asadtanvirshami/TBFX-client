@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 // Reducers
 import userReducer from "./slices/user/user-slice";
 import accountReducer from "./slices/trade-account/trade_account-slice";
+import uiReducer from "./slices/ui/slice";
 
 // Persist config for redux-persist
 const persistConfig = {
@@ -17,6 +18,7 @@ const persistedUserReducer = persistReducer(persistConfig, userReducer);
 const rootReducer = combineReducers({
   user: persistedUserReducer,
   trade_account: accountReducer,
+  ui: uiReducer,
 });
 
 // Configuring the Redux store

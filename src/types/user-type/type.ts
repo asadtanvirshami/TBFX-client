@@ -15,3 +15,11 @@ export interface User {
 
   activeTradeAccountId: string;
 }
+
+export interface UpdateProfileData {
+  [key: string]: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}

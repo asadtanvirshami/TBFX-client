@@ -5,8 +5,8 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Settings,
   Sparkles,
+  User,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -33,6 +33,7 @@ import { logoutUser } from "@/redux/slices/user/user-slice";
 import { queryClient } from "@/provider/react-query";
 
 export interface SafeUser {
+  sub: string;
   name: string;
   email: string;
   avatar: string;
@@ -53,12 +54,12 @@ export function NavUser({ user }: { user: SafeUser }) {
       dispatch(logoutUser());
 
       router.push("/auth/signin");
-      
     } catch (error) {
       console.error(error);
     }
   };
-
+  console.log(user.avatar, "user avatar");
+  
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -68,9 +69,9 @@ export function NavUser({ user }: { user: SafeUser }) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-lg ">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">
+                <AvatarFallback className="rounded-lg  bg-gradient-to-tr from-pink-500 to-rose-500">
                   {user.name.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
@@ -110,8 +111,10 @@ export function NavUser({ user }: { user: SafeUser }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push("protected-route/profile/:id")}>
-                <Settings />
+              <DropdownMenuItem
+                onClick={() => router.push(`profile/${user.sub}`)}
+              >
+                <User />
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>

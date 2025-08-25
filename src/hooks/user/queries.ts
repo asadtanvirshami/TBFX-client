@@ -14,6 +14,7 @@ export const useUser = () => {
     queryFn: () => api.get(apiEndpoints.users.me).then((res) => res.data),
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: true,
   });
 
   return {
