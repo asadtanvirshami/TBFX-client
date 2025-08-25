@@ -11,6 +11,10 @@ export const verifyJWTServer = async (accessToken: string) => {
   const res = await fetch(
     `${BASE_URL}/${PRIVACY}/api/${VERSION}${apiEndpoints.auth.verifyJWT}`,
     {
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${accessToken}`,
+      },
       method: "GET",
       cache: "no-store",
       credentials: "include",

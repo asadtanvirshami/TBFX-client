@@ -52,11 +52,11 @@ export const useResendOtp = () =>
         .then((res) => res.data),
   });
 
-export const useResetPassword = () =>
+export const useResetPassword = (id: string) =>
   useMutation({
     mutationFn: (input: ResetPasswordInput) =>
       api
-        .post(apiEndpoints.auth.reset, sanitizeFlatStrings(input))
+        .post(apiEndpoints.auth.reset(id), sanitizeFlatStrings(input))
         .then((res) => res.data),
   });
 
@@ -71,7 +71,10 @@ export const useAccountRecovery = () =>
 export const useLogout = () =>
   useMutation({
     mutationFn: () =>
-      api
-        .post(apiEndpoints.auth.logout)
-        .then((res) => res.data),
+      api.post(apiEndpoints.auth.logout).then((res) => res.data),
+  });
+
+export const useVerify = () =>
+  useMutation({
+    mutationFn: () => api.get(apiEndpoints.auth.verify).then((res) => res.data),
   });

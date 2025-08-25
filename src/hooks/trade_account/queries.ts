@@ -28,16 +28,17 @@ export const useActiveAccount = () => {
 
 export const useGetAccounts = () => {
   const user = useSelector((state: RootState) => state.user.user);
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["accounts"],
     queryFn: async () => {
       const res = await api.get(apiEndpoints.trade_account.get);
 
       return res.data;
-    }, 
-    retry: true,
+    },
+    retry: false,
     refetchOnWindowFocus: false,
     enabled: user !== null,
+    staleTime: 1000 * 60 * 5,
   });
 
   return {
@@ -45,5 +46,6 @@ export const useGetAccounts = () => {
     isLoading,
     isError,
     error,
+    refetch,
   };
 };

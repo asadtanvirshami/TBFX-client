@@ -23,9 +23,7 @@ export interface OtpInput {
 
 export interface ResetPasswordInput {
   [key: string]: string;
-  email: string;
-  otp: string;
-  newPassword: string;
+  password: string;
 }
 export interface AccountRecoveryInput {
   [key: string]: string;

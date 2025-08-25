@@ -26,7 +26,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { ModeToggle } from "../theme-provider/toggle-button";
 
 import dark_logo from "../../../../public/assets/dark.png";
 import light_logo from "../../../../public/assets/light.png";
@@ -34,52 +33,6 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-
-const sidebarData = {
-  user: {
-    name: "John Davis",
-    email: "john@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    { title: "Dashboard", url: "#", icon: Dock },
-    {
-      title: "Operations",
-      url: "#",
-      icon: Target,
-      items: [
-        { title: "Orders", url: "#" },
-        { title: "Portfolios", url: "#" },
-      ],
-    },
-    { title: "Strategy", url: "#", icon: Frame },
-    { title: "Trading Journal", url: "#", icon: Book },
-    { title: "Patterns", url: "#", icon: CandlestickChart },
-    { title: "Learning", url: "#", icon: BookOpen },
-    { title: "Rewards", url: "#", icon: Award },
-    {
-      title: "Tools",
-      url: "#",
-      icon: Calculator,
-      items: [{ title: "Lot Size Calculator", url: "#" }],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        { title: "General", url: "#" },
-        { title: "Team", url: "#" },
-        { title: "Billing", url: "#" },
-        { title: "Limits", url: "#" },
-      ],
-    },
-  ],
-  navSecondary: [
-    { title: "Support", url: "#", icon: LifeBuoy },
-    { title: "Feedback", url: "#", icon: Send },
-  ],
-};
 
 const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
   const { theme } = useTheme();
@@ -90,6 +43,52 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
     [theme]
   );
 
+  const sidebarData = {
+    user: {
+      name: "John Davis",
+      email: "john@example.com",
+      avatar: "/avatars/shadcn.jpg",
+    },
+    navMain: [
+      { title: "Dashboard", url: "/protected-route/dashboard", icon: Dock },
+      {
+        title: "Operations",
+        url: "#",
+        icon: Target,
+        items: [
+          { title: "Orders", url: "#" },
+          { title: "Portfolios", url: "#" },
+        ],
+      },
+      { title: "Strategy", url: "/protected-route/strategy", icon: Frame },
+      { title: "Trading Journal", url: "#", icon: Book },
+      { title: "Patterns", url: "#", icon: CandlestickChart },
+      { title: "Learning", url: "#", icon: BookOpen },
+      { title: "Rewards", url: "#", icon: Award },
+      {
+        title: "Tools",
+        url: "#",
+        icon: Calculator,
+        items: [{ title: "Lot Size Calculator", url: "#" }],
+      },
+      {
+        title: "Settings",
+        url: "#",
+        icon: Settings2,
+        items: [
+          { title: "General", url: "#" },
+          { title: "Team", url: "#" },
+          { title: "Billing", url: "#" },
+          { title: "Limits", url: "#" },
+        ],
+      },
+    ],
+    navSecondary: [
+      { title: "Support", url: "#", icon: LifeBuoy },
+      { title: "Feedback", url: "#", icon: Send },
+    ],
+  };
+
   return (
     <Sidebar className="shadow-md " variant="inset" {...props}>
       <SidebarHeader>
@@ -98,8 +97,9 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
             <div className="flex items-center">
               <Image src={logo} alt="Logo" width={50} height={50} />
               <div className="grid flex-1 w-full text-left leading-tight font-[family-name:var(--font-poppins)]">
-                <span className="font-semibold text-xl bg-gradient-to-r from-pink-500 to-pink-400 bg-clip-text text-transparent">
-                  BackTesting
+                <span className="text-sm white">Trading BackTesting</span>
+                <span className="font-semibold text-md bg-gradient-to-r from-pink-500 to-pink-400 bg-clip-text text-transparent">
+                  Platform
                 </span>
               </div>
             </div>
@@ -109,7 +109,7 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
 
       <SidebarContent>
         <NavMain items={sidebarData.navMain} />
-        <ModeToggle />
+
         <NavSecondary items={sidebarData.navSecondary} className="mt-auto" />
       </SidebarContent>
 
@@ -120,6 +120,7 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
               name: user.firstName + " " + user.lastName,
               email: user.email,
               avatar: user.avatar || "",
+              sub: user.sub || "",
             }}
           />
         ) : null}

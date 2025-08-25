@@ -6,7 +6,7 @@ export const apiEndpoints = {
     signup: "/auth/signup",
     verifyOtp: "/auth/verify-otp",
     resendOtp: "/auth/resend-otp",
-    reset: "/auth/reset",
+    reset: (id: string) => `/auth/reset-password/${id}`,
     account_recovery: "/auth/account-recovery",
     verifyJWT: "/auth/verify-session",
     verify: "/auth/verify",
@@ -14,6 +14,8 @@ export const apiEndpoints = {
   users: {
     base: "/user",
     me: "/user/me",
+    update: (id: string) => `/user/update/${id}`,
+    avatar: (id: string) => `/user/avatar/upload/${id}`,
     one: (id: string) => `/user/${id}`,
   },
   trades: {
@@ -27,6 +29,7 @@ export const apiEndpoints = {
     stats: "/trade/get-stats",
   },
   trade_account: {
+    register: "/trade-account/register",
     base: "/trade-account",
     get: "/trade-account/get",
     active: "/trade-account/active",
@@ -34,6 +37,6 @@ export const apiEndpoints = {
   },
   dashboard: {
     base: "/dashboard",
-    stats: "/dashboard/stats",
+    stats: (id: string) => `/dashboard/stats/${id}`,
   },
 };

@@ -96,7 +96,7 @@ export const SignInForm = () => {
 
           if (result.isError) return;
 
-          if (result.data.valid === true) {
+          if (result.data.valid === true) {;
             dispatch(loginSuccess(result.data.user));
             form.reset();
             router.push("/protected-route/dashboard");
