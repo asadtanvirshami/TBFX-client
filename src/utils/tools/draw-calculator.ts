@@ -22,7 +22,6 @@ export function calculateDraw({
   takeProfit,
   contractSize,
   tickValue,
-  leverage,
 }: CalcInput) {
   const riskAmount = (balance * riskPercent) / 100;
   let positionSize = 0;

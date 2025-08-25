@@ -14,7 +14,7 @@ import {
 import { useGetAccounts } from "@/hooks/trade_account/queries";
 import { TradeAcc } from "@/types/account-type/type";
 import { useAccountSwitch } from "@/hooks/trade_account/mutations";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   setAccountState,
   setSelectedAccount,
@@ -24,7 +24,6 @@ import { PlusCircle } from "lucide-react";
 import { openForm } from "@/redux/slices/ui/slice";
 import AccountSignin from "@/components/form/account-signin";
 import { ModeToggle } from "../theme-provider/toggle-button";
-import { RootState } from "@/redux/store";
 
 const SwitchAccountSelector = () => {
   const dispatch = useDispatch();

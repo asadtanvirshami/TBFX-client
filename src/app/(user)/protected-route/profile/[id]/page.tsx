@@ -1,7 +1,7 @@
 import React from "react";
 import ProfileView from "./component/profile-layout";
 
-const page = ({ params }: { params: { id: string } }) => {
+const page = () => {
   return <ProfileView/>;
 };
 
