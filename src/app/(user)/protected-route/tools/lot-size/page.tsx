@@ -1,10 +1,10 @@
 import React from "react";
-import DrawCalculator from "./components/draw-calculator";
+import LotSizeLayout from "./components/lot-size-layout";
 
 const page = () => {
   return (
     <div>
-      <DrawCalculator />
+      <LotSizeLayout />
     </div>
   );
 };

@@ -29,7 +29,6 @@ import { RootState } from "@/redux/store";
 const SwitchAccountSelector = () => {
   const dispatch = useDispatch();
   const selectAccount = useAccountSwitch();
-  const account = useSelector((state: RootState) => state.trade_account);
   const {
     data: accounts,
     isLoading: isLoadingAccount,
@@ -50,7 +49,6 @@ const SwitchAccountSelector = () => {
       dispatch(setAccountState({ accounts: null, isLoading: false }));
     }
   }, [accounts]);
-  console.log(accounts,"acc");
   
   const handleAccountSwitch = (accountId: string) => {
     selectAccount.mutate(

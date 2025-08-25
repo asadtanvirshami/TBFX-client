@@ -14,13 +14,16 @@ interface TabMenuProps {
 }
 
 const TabMenu = ({ data, setData }: TabMenuProps) => {
+  console.log(data);
   return (
     <Tabs defaultValue="account">
       <TabsList>
-        <TabsTrigger value="all">All</TabsTrigger>
+        <TabsTrigger onClick={() => setData(data)} value="all">
+          All
+        </TabsTrigger>
         <TabsTrigger value="manual">Manual</TabsTrigger>
-        <TabsTrigger value="paid">Paid</TabsTrigger>
-        <TabsTrigger value="elite">Elite "Addon"</TabsTrigger>
+        <TabsTrigger value="elite">Elite</TabsTrigger>
+        <TabsTrigger value="elite">Addon</TabsTrigger>
       </TabsList>
     </Tabs>
   );

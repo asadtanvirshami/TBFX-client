@@ -2,11 +2,11 @@
 
 import { Fragment, useState } from "react";
 import StrategyCard from "./strategy-card";
-import { Card } from "@/components/ui/card";
-import Cards from "./strategy-card";
+// import { Card } from "@/components/ui/card";
+// import Cards from "./strategy-card";
 import AddStrategyCard from "./add-strategy";
-import StrategyForm from "../form/strategy-form";
-import TabMenu from "./tab-menu";
+// import StrategyForm from "../form/strategy-form";
+// import TabMenu from "./tab-menu";
 import { StrategyData } from "@/types/strategy-type/type";
 import StrategyHeader from "./tab-menu";
 
@@ -100,20 +100,12 @@ const PageLayout = () => {
         <StrategyHeader data={data} setData={setData} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 ">
           {data.map((strategy) => (
-            <StrategyCard
-              key={strategy.id}
-              strategy={{
-                ...strategy,
-                rules: strategy.rules.filter(
-                  (rule) => rule !== undefined
-                ) as string[],
-              }}
-            />
+            <StrategyCard key={strategy.id} strategy={strategy} />
           ))}
           <AddStrategyCard />
         </div>
       </div>
-      <StrategyForm buttonVisibility={false} />
+      {/* <StrategyForm buttonVisibility={false} /> */}
     </Fragment>
   );
 };

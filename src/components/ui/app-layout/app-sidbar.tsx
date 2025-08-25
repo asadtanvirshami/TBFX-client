@@ -61,7 +61,7 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
         ],
       },
       { title: "Strategy", url: "/protected-route/strategy", icon: Frame },
-      { title: "Trading Journal", url: "#", icon: Book },
+      { title: "Trading Journal", url: "/protected-route/trading-journal", icon: Book },
       { title: "Patterns", url: "#", icon: CandlestickChart },
       { title: "Learning", url: "#", icon: BookOpen },
       { title: "Rewards", url: "#", icon: Award },
@@ -69,7 +69,7 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
         title: "Tools",
         url: "#",
         icon: Calculator,
-        items: [{ title: "Lot Size Calculator", url: "#" }],
+        items: [{ title: "Lot Size Calculator", url: "/protected-route/tools/lot-size" }],
       },
       {
         title: "Settings",

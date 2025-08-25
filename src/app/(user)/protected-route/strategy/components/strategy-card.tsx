@@ -19,7 +19,7 @@ interface Strategy {
   id: string;
   title: string;
   description: string;
-  rules: string[];
+  rules: (string | undefined)[];
   type: "manual" | "elite" | "paid" | "addon";
   cost?: string;
 }
