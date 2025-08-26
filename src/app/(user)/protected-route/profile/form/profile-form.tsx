@@ -57,6 +57,7 @@ const ProfileForm = () => {
       { ...data },
       {
         onSuccess: (res) => {
+          console.log(res);
           if (!res?.success) {
             setError("root", {
               type: "server",
@@ -64,6 +65,7 @@ const ProfileForm = () => {
             });
             return;
           }
+
           dispatch(updateProfile(res?.user));
           setIsEditForm(false);
         },
