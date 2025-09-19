@@ -36,8 +36,7 @@ const getBadgeColor = (data: StrategyData) => {
 
 export default function StrategyCard({ strategy }: { strategy: StrategyData }) {
   const dispatch = useDispatch();
-  const { title, comment, type, price, currency, hasPrice } =
-    strategy;
+  const { title, comment, type, price, currency, hasPrice } = strategy;
 
   return (
     <Card className="border rounded-xl shadow-sm">
@@ -110,9 +109,9 @@ export default function StrategyCard({ strategy }: { strategy: StrategyData }) {
           <Button
             variant={"outline"}
             onClick={() => {
-              dispatch(setStrategyValues(strategy)),
-                dispatch(setEditStrategy(true)),
-                dispatch(openForm("strategy-form"));
+              dispatch(setStrategyValues(strategy));
+              dispatch(setEditStrategy(true));
+              dispatch(openForm("strategy-form"));
             }}
           >
             <EditIcon className="w-8 h-8" />

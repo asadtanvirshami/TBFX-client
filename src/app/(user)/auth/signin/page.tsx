@@ -2,8 +2,8 @@
 
 import React from "react";
 import SignInForm from "@/app/(user)/auth/signin/form/signin-form";
-import Image from "next/image";
-import { useTheme } from "next-themes";
+// import Image from "next/image";
+// import { useTheme } from "next-themes";
 
 // import dark_logo from "../../../../../public/assets/dark.png";
 // import light_logo from "../../../../../public/assets/light.png";
