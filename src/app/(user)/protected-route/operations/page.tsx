@@ -2,10 +2,6 @@
 import PageLayout from "./components/page-layout";
 import { getSearchParams } from "@/utils/search-params/url-search-params";
 
-interface TradesPageProps {
-  searchParams?: Record<string, string | string[] | undefined>;
-}
-
 // Helper to normalize searchParams
 function normalizeSearchParams(
   params?: Record<string, string | string[] | undefined>
@@ -19,7 +15,11 @@ function normalizeSearchParams(
 }
 
 // Synchronous page
-export default function TradesPage({ searchParams }: TradesPageProps) {
+export default function TradesPage({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
   const normalized = normalizeSearchParams(searchParams);
 
   const { accountId, page, limit } = getSearchParams(normalized, {
