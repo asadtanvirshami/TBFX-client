@@ -3,12 +3,12 @@ import PageLayout from "./components/page-layout";
 import { getSearchParams } from "@/utils/search-params/url-search-params";
 
 interface TradesPageProps {
-  searchParams: Record<string, string | string[]>;
+  searchParams: PageProps<"/protected-route/operations">["searchParams"];
 }
 
 // Normalize searchParams: take first element if array
 function normalizeSearchParams(
-  params: Record<string, string | string[]>
+  params: PageProps<"/protected-route/operations">["searchParams"]
 ): Record<string, string> {
   const normalized: Record<string, string> = {};
   Object.entries(params).forEach(([key, value]) => {
