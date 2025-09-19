@@ -13,6 +13,7 @@ import {
   Send,
   Settings2,
   Target,
+  Users2Icon,
 } from "lucide-react";
 
 import { NavMain } from "@/components/ui/app-layout/nav-main";
@@ -36,7 +37,8 @@ import { RootState } from "@/redux/store";
 
 const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
   const { theme } = useTheme();
-  const user = useSelector((state: RootState) => state.user.user);
+  const User = useSelector((state: RootState) => state.user.user);
+  const TradeAccount = useSelector((state: RootState) => state.trade_account);
 
   const logo = React.useMemo(
     () => (theme === "dark" ? dark_logo : light_logo),
@@ -53,33 +55,39 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
       { title: "Dashboard", url: "/protected-route/dashboard", icon: Dock },
       {
         title: "Operations",
-        url: "#",
+        url: `/protected-route/operations?accountId=${
+          TradeAccount?.current || ""
+        }&limit=10 &page=1`,
         icon: Target,
-        items: [
-          { title: "Orders", url: "#" },
-          { title: "Portfolios", url: "#" },
-        ],
       },
       { title: "Strategy", url: "/protected-route/strategy", icon: Frame },
-      { title: "Trading Journal", url: "/protected-route/trading-journal", icon: Book },
-      { title: "Patterns", url: "#", icon: CandlestickChart },
-      { title: "Learning", url: "#", icon: BookOpen },
-      { title: "Rewards", url: "#", icon: Award },
+      {
+        title: "Trading Journal",
+        url: "/protected-route/trading-journal",
+        icon: Book,
+      },
+      { title: "Podium", url: "/protected-route/podium", icon: Users2Icon },
+      // { title: "Patterns", url: "#", icon: CandlestickChart },
+      // { title: "Learning", url: "#", icon: BookOpen },
+      // { title: "Rewards", url: "#", icon: Award },
       {
         title: "Tools",
         url: "#",
         icon: Calculator,
-        items: [{ title: "Lot Size Calculator", url: "/protected-route/tools/lot-size" }],
+        items: [
+          {
+            title: "Lot Size Calculator",
+            url: "/protected-route/tools/lot-size",
+          },
+        ],
       },
       {
         title: "Settings",
         url: "#",
         icon: Settings2,
         items: [
-          { title: "General", url: "#" },
-          { title: "Team", url: "#" },
-          { title: "Billing", url: "#" },
-          { title: "Limits", url: "#" },
+          { title: "Billing", url: "/protected-route/billing" },
+          { title: "Trade Accounts", url: "/protected-route/trade-accounts" },
         ],
       },
     ],
@@ -114,13 +122,13 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
       </SidebarContent>
 
       <SidebarFooter>
-        {user ? (
+        {User ? (
           <NavUser
             user={{
-              name: user.firstName + " " + user.lastName,
-              email: user.email,
-              avatar: user.avatar || "",
-              sub: user.sub || "",
+              name: User.firstName + " " + User.lastName,
+              email: User.email,
+              avatar: User.avatar || "",
+              sub: User.sub || "",
             }}
           />
         ) : null}

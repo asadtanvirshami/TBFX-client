@@ -24,19 +24,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-interface Trade {
-  id: string;
-  date: string; // ISO format e.g. "2025-07-01T09:30:00Z"
-  pair: string; // Currency pair or instrument
-  profit: number; // Profit or loss amount
-  entry: string; // Entry price or signal
-  exit: string; // Exit price or reason
-  notes: string; // Optional notes
-}
+import { TradeRaw } from "@/types/trade-type/type";
 
 const TradeContext = React.createContext<
-  [Trade[], React.Dispatch<React.SetStateAction<Trade[]>>] | undefined
+  [TradeRaw[], React.Dispatch<React.SetStateAction<TradeRaw[]>>] | undefined
 >(undefined);
 
 // const colors = [
@@ -62,7 +53,7 @@ const DayCell = (
   const [trades] = context;
 
   const matchingTrades = trades.filter((trade) =>
-    isSameDay(new Date(trade.date), props.day.date)
+    isSameDay(new Date(trade.createdAt), props.day.date)
   );
 
   const handleDateClick = () => {
@@ -97,15 +88,15 @@ const DayCell = (
                     handleDateClick();
                   }}
                 >
-                  {trade.pair}
+                  {trade.symbol}
                 </div>
               </TooltipTrigger>
               <TooltipContent className="bg-black text-white max-w-xs">
-                <div className="font-medium text-sm">{trade.pair}</div>
+                <div className="font-medium text-sm">{trade.symbol}</div>
                 <div className="text-xs">P/L: ${trade.profit}</div>
-                <div className="text-xs">Entry: {trade.entry}</div>
-                <div className="text-xs">Exit: {trade.exit}</div>
-                <div className="text-xs italic mt-1">{trade.notes}</div>
+                <div className="text-xs">Entry: {trade.openPrice}</div>
+                <div className="text-xs">Exit: {trade.closePrice}</div>
+                <div className="text-xs italic mt-1">{trade.note}</div>
               </TooltipContent>
             </Tooltip>
           ))}
@@ -115,14 +106,12 @@ const DayCell = (
   );
 };
 
-// ... existing code ...
-
 const SelectedDateTrades = ({
   selectedDate,
   trades,
 }: {
   selectedDate: Date | undefined;
-  trades: Trade[];
+  trades: TradeRaw[];
 }) => {
   if (!selectedDate) {
     return (
@@ -138,7 +127,7 @@ const SelectedDateTrades = ({
   }
 
   const selectedTrades = trades.filter((trade) =>
-    isSameDay(new Date(trade.date), selectedDate)
+    isSameDay(new Date(trade.createdAt), selectedDate)
   );
 
   const totalProfit = selectedTrades.reduce(
@@ -169,7 +158,7 @@ const SelectedDateTrades = ({
           <span className="text-red-600">Losses: {losingTrades}</span>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4 max-h-[300px] md:min-h-[200px] lg:min-h-[200px] xl:min-h-[650px] overflow-y-auto">
         {selectedTrades.length === 0 ? (
           <p className="text-muted-foreground">No trades for this date</p>
         ) : (
@@ -182,7 +171,7 @@ const SelectedDateTrades = ({
                 }`}
               >
                 <div className="flex justify-between items-start mb-2">
-                  <div className="font-semibold text-lg">{trade.pair}</div>
+                  <div className="font-semibold text-lg">{trade.symbol}</div>
                   <div
                     className={`font-bold text-lg ${
                       trade.profit >= 0 ? "text-green-600" : "text-red-600"
@@ -191,20 +180,20 @@ const SelectedDateTrades = ({
                     ${trade.profit.toFixed(2)}
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="flex gap-2 text-sm justify-start w-full">
                   <div>
                     <span className="text-muted-foreground">Entry:</span>
-                    <span className="ml-1 font-medium">{trade.entry}</span>
+                    <span className="ml-1 font-medium">{trade.openPrice}</span>
                   </div>
                   <div>
                     <span className="text-muted-foreground">Exit:</span>
-                    <span className="ml-1 font-medium">{trade.exit}</span>
+                    <span className="ml-1 font-medium">{trade.closePrice}</span>
                   </div>
                 </div>
-                {trade.notes && (
+                {trade.note && (
                   <div className="mt-2 text-sm">
                     <span className="text-muted-foreground">Notes:</span>
-                    <span className="ml-1 italic">{trade.notes}</span>
+                    <span className="ml-1 italic">{trade.note}</span>
                   </div>
                 )}
               </div>
@@ -228,10 +217,10 @@ function TradeCalendarWidget({
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
-  taskData: Trade[];
+  taskData: TradeRaw[];
 }) {
   const defaultClassNames = getDefaultClassNames();
-  const [taskList, setTaskList] = React.useState<Trade[]>(taskData);
+  const [taskList, setTaskList] = React.useState<TradeRaw[]>(taskData || []);
   const [selected, setSelected] = React.useState<Date | undefined>(undefined);
 
   React.useEffect(() => {

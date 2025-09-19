@@ -26,6 +26,18 @@ export const recoverySchema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
 });
 
+export const resetPasswordSchema = yup.object({
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
+  token: yup.string().required("Token is required"),
+});
+
 export const signInMetaTraderSchema = yup.object({
   accountId: yup.string().required("accountId is required"),
   broker_server: yup.string().required("broker_server is required"),

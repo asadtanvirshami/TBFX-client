@@ -7,9 +7,9 @@ import {
   SignupInput,
   GooginSigninInput,
   OtpInput,
-  ResetPasswordInput,
   AccountRecoveryInput,
   ResendOTPInput,
+  ResetPasswordInput,
 } from "./types";
 
 export const useSignin = () =>
@@ -52,19 +52,23 @@ export const useResendOtp = () =>
         .then((res) => res.data),
   });
 
-export const useResetPassword = (id: string) =>
+export const useResetPassword = () =>
   useMutation({
     mutationFn: (input: ResetPasswordInput) =>
       api
-        .post(apiEndpoints.auth.reset(id), sanitizeFlatStrings(input))
+        .post(
+          apiEndpoints.auth.reset_password,
+          sanitizeFlatStrings(input)
+        )
         .then((res) => res.data),
   });
 
 export const useAccountRecovery = () =>
   useMutation({
+
     mutationFn: (input: AccountRecoveryInput) =>
       api
-        .post(apiEndpoints.auth.account_recovery, sanitizeFlatStrings(input))
+        .post(apiEndpoints.auth.forgot_password, sanitizeFlatStrings(input))
         .then((res) => res.data),
   });
 

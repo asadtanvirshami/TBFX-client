@@ -27,3 +27,11 @@ export const useUpdateAvatar = () =>
         .then((res) => res.data);
     },
   });
+
+export const useChangePassword = () =>
+  useMutation({
+    mutationFn: (input: { id: string; password: string }) =>
+      api
+        .put(apiEndpoints.users.change_password(input.id), input)
+        .then((res) => res.data),
+  });

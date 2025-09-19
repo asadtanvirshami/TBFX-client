@@ -38,6 +38,7 @@ const AccountSignin = ({ buttonVisibility }: { buttonVisibility: boolean }) => {
   const isOpen = useSelector(
     (state: RootState) => state.ui.forms["trade-account"]
   );
+  const user = useSelector((state: RootState) => state.user.user);
 
   const form = useForm<MetaTraderFormData>({
     resolver: yupResolver(signInMetaTraderSchema),
@@ -45,7 +46,7 @@ const AccountSignin = ({ buttonVisibility }: { buttonVisibility: boolean }) => {
       accountId: "",
       investor_password: "",
       broker_server: "",
-      user: useSelector((state: RootState) => state.user.user)?.sub || "",
+      user: user?.sub || "",
       type: "mt4",
     },
   });

@@ -29,8 +29,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { closeForm, openForm } from "@/redux/slices/ui/slice";
 import React, { memo } from "react";
-import { useResetPassword } from "@/hooks/auth/mutations";
 import { handleError } from "@/utils/error-handler";
+import { useChangePassword } from "@/hooks/user/mutations";
 
 const ChangePassword = ({
   buttonVisibility,
@@ -45,7 +45,7 @@ const ChangePassword = ({
   );
 
   const userId = useSelector((state: RootState) => state.user.user?.sub);
-  const passwordMutation = useResetPassword(userId!);
+  const passwordMutation = useChangePassword();
 
   const form = useForm<ChangePasswordData>({
     resolver: yupResolver(changePasswordSchema),
@@ -67,6 +67,7 @@ const ChangePassword = ({
       passwordMutation.mutate(
         {
           password: data.password,
+          id: userId || "",
         },
         {
           onSuccess: (data) => {

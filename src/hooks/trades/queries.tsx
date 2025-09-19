@@ -27,3 +27,29 @@ export const useGetStats = (accountId: string, page = 1, limit = 8) => {
     error,
   };
 };
+
+export const useGetTrades = (accountId: string, page = 1, limit = 8) => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["trades", accountId, page, limit],
+    queryFn: async () => {
+      const res = await api.get(apiEndpoints.trades.get, {
+        params: {
+          page,
+          limit,
+          accountId,
+        },
+      });
+
+      return res.data;
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  return {
+    data,
+    isLoading,
+    isError,
+    error,
+  };
+};

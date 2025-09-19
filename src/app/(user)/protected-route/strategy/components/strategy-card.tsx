@@ -13,32 +13,32 @@ import { Badge } from "@/components/ui/badge"; // shadcn badge for labels
 import { cn } from "@/lib/utils";
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, EditIcon } from "lucide-react";
+import { StrategyData } from "@/types/strategy-type/type";
+import { useDispatch } from "react-redux";
+import {
+  setEditStrategy,
+  setStrategyValues,
+} from "@/redux/slices/strategy/slice";
+import { openForm } from "@/redux/slices/ui/slice";
 
-interface Strategy {
-  id: string;
-  title: string;
-  description: string;
-  rules: (string | undefined)[];
-  type: "manual" | "elite" | "paid" | "addon";
-  cost?: string;
-}
-
-const getBadgeColor = (data: Strategy) => {
+const getBadgeColor = (data: StrategyData) => {
   switch (data.type) {
-    case "manual":
+    case "PERSONAL":
       return "bg-gradient-to-r from-blue-500 to-sky-500 text-white w-fit";
-    case "elite":
+    case "ELITE":
       return "bg-gradient-to-r from-pink-500 to-rose-500 text-white w-fit";
-    case "addon":
+    case "ADDON":
       return "bg-gradient-to-r from-yellow-500 to-orange-500 text-white w-fit";
     default:
       return "bg-gray-500 text-white w-fit";
   }
 };
 
-export default function StrategyCard({ strategy }: { strategy: Strategy }) {
-  const { title, description, rules, type, cost } = strategy;
+export default function StrategyCard({ strategy }: { strategy: StrategyData }) {
+  const dispatch = useDispatch();
+  const { title, comment, type, price, currency, hasPrice, isPremium } =
+    strategy;
 
   return (
     <Card className="border rounded-xl shadow-sm">
@@ -55,27 +55,14 @@ export default function StrategyCard({ strategy }: { strategy: Strategy }) {
             {type.toUpperCase()}
           </Badge>
         </CardTitle>
-        {<CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className="h-full">
-        {type === "manual" && (
+        {type === "PERSONAL" && (
           <ul className="px-4 list-disc list-inside text-sm text-gray-500 space-y-1">
-            {rules.map((rule, idx) => (
-              <li key={idx}>{rule}</li>
-            ))}
+            {comment}
           </ul>
         )}
-        {type === "elite" && (
-          <ul className="px-4 list-disc blur list-inside text-sm text-gray-500 space-y-1">
-            <p>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Expedita, qui consectetur quod porro cupiditate autem doloribus
-              saepe illo inventore facere sequi doloremque ea laborum labore
-              nemo delectus eligendi iste eaque.
-            </p>
-          </ul>
-        )}
-        {type === "addon" && (
+        {(type === "ELITE" || type === "ADDON") && (
           <ul className="px-4 list-disc blur list-inside text-sm text-gray-500 space-y-1">
             <p>
               Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -87,7 +74,7 @@ export default function StrategyCard({ strategy }: { strategy: Strategy }) {
         )}
       </CardContent>
       <CardFooter className="flex justify-between items-center text-sm mt-5">
-        {cost && (
+        {hasPrice && (
           <Fragment>
             <Button
               className={cn(
@@ -97,12 +84,20 @@ export default function StrategyCard({ strategy }: { strategy: Strategy }) {
             >
               Buy
             </Button>
-            <p className="font-semibold text-lg">{cost}</p>
+            {hasPrice && (
+              <p className="font-semibold text-lg space-x-2">
+                {currency} {price}
+              </p>
+            )}
           </Fragment>
         )}
-        {!cost && (
+        {!hasPrice && (
           <Fragment>
             <Button
+              onClick={() => {
+                dispatch(setStrategyValues(strategy));
+                dispatch(openForm("view-strategy"));
+              }}
               className={cn(
                 getBadgeColor(strategy),
                 "w-22 px-8 py-2 shadow-md text-sm w-fit text-sm  "
@@ -110,8 +105,19 @@ export default function StrategyCard({ strategy }: { strategy: Strategy }) {
             >
               Access <ArrowRightIcon />
             </Button>
-            <p className="font-semibold text-xl">{cost}</p>
           </Fragment>
+        )}
+        {type === "PERSONAL" && (
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              dispatch(setStrategyValues(strategy)),
+                dispatch(setEditStrategy(true)),
+                dispatch(openForm("strategy-form"));
+            }}
+          >
+            <EditIcon className="w-8 h-8" />
+          </Button>
         )}
       </CardFooter>
     </Card>

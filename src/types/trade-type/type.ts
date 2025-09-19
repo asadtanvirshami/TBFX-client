@@ -23,6 +23,7 @@ export interface TradeRaw {
   status: string | null;
   strategyTag: string | null;
   slippage: number | null;
+  note: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

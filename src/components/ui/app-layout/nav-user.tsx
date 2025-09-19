@@ -58,7 +58,6 @@ export function NavUser({ user }: { user: SafeUser }) {
       console.error(error);
     }
   };
-  console.log(user.avatar, "user avatar");
   
   return (
     <SidebarMenu>

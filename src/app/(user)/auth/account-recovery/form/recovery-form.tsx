@@ -65,8 +65,6 @@ const RecoveryForm = () => {
             });
             return;
           }
-          sessionStorage.setItem("email", data.email);
-          router.push("/auth/otp");
         },
         onError: (error) => {
           handleError(error, {

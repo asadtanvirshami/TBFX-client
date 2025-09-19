@@ -31,7 +31,7 @@ export default function AddStrategyCard() {
 
       <CardContent className="flex justify-center items-center h-full border">
         <Button
-          onClick={() => dispatch(openForm("strategy-form"))}
+          onClick={() => dispatch(openForm("create-strategy"))}
           className="text-white bg-gradient-to-tr from-green-500 to-green-600 text-md"
           size={"lg"}
         >

@@ -30,3 +30,8 @@ export interface ChangePasswordData {
   password: string;
   confirm_password: string;
 }
+
+export interface ResetPasswordData {
+  password: string;
+  confirm_password: string;
+}

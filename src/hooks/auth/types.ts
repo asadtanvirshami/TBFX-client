@@ -21,9 +21,16 @@ export interface OtpInput {
   otp: string;
 }
 
+export interface ChangePasswordInput {
+  [key: string]: string;
+  id: string;
+  password: string;
+}
 export interface ResetPasswordInput {
   [key: string]: string;
   password: string;
+  confirm_password: string;
+  token: string;
 }
 export interface AccountRecoveryInput {
   [key: string]: string;
