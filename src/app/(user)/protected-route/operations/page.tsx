@@ -9,7 +9,7 @@ import { getSearchParams } from "@/utils/search-params/url-search-params";
 import PageLayout from "./components/page-layout";
 import { ReactNode } from "react";
 interface TradesPageProps {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams?: Record<string, string | string[] | undefined>;
 }
 
 export default async function TradesPage({
