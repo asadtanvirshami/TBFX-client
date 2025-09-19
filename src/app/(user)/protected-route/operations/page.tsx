@@ -11,10 +11,16 @@ import PageLayout from "./components/page-layout";
 export default async function TradesPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Record<string, string | string[] | undefined>;
 }) {
-  const resolvedParams = await searchParams;
-  const { accountId, page, limit } = getSearchParams(resolvedParams, {
+  // normalize searchParams: take first value if array
+  const normalized: Record<string, string> = {};
+  Object.entries(searchParams).forEach(([key, value]) => {
+    if (Array.isArray(value)) normalized[key] = value[0];
+    else if (value !== undefined) normalized[key] = value;
+  });
+
+  const { accountId, page, limit } = getSearchParams(normalized, {
     accountId: "default-account",
     page: 1,
     limit: 8,
