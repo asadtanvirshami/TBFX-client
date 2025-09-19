@@ -15,11 +15,11 @@ export default async function TradesPage({
 }) {
   // normalize searchParams: take first value if array
   const normalized: Record<string, string> = {};
-  Object.entries(searchParams).forEach(([key, value]) => {
+  Object.entries(searchParams ?? {}).forEach(([key, value]) => {
     if (Array.isArray(value)) normalized[key] = value[0];
     else if (value !== undefined) normalized[key] = value;
   });
-
+  
   const { accountId, page, limit } = getSearchParams(normalized, {
     accountId: "default-account",
     page: 1,
