@@ -2,24 +2,22 @@
 import PageLayout from "./components/page-layout";
 import { getSearchParams } from "@/utils/search-params/url-search-params";
 
-// Helper to normalize searchParams
+interface TradesPageProps {
+  searchParams: Record<string, string | string[]>;
+}
+
+// Normalize searchParams: take first element if array
 function normalizeSearchParams(
-  params?: Record<string, string | string[] | undefined>
+  params: Record<string, string | string[]>
 ): Record<string, string> {
   const normalized: Record<string, string> = {};
-  Object.entries(params ?? {}).forEach(([key, value]) => {
-    if (Array.isArray(value)) normalized[key] = value[0];
-    else if (value !== undefined) normalized[key] = value;
+  Object.entries(params).forEach(([key, value]) => {
+    normalized[key] = Array.isArray(value) ? value[0] : value;
   });
   return normalized;
 }
 
-// Synchronous page
-export default function TradesPage({
-  searchParams,
-}: {
-  searchParams?: Record<string, string | string[] | undefined>;
-}) {
+export default function TradesPage({ searchParams }: TradesPageProps) {
   const normalized = normalizeSearchParams(searchParams);
 
   const { accountId, page, limit } = getSearchParams(normalized, {
