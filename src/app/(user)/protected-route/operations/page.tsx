@@ -23,7 +23,7 @@ export default function TradesPage({ searchParams }: TradesPageProps) {
   const { accountId, page, limit } = getSearchParams(normalized, {
     accountId: "default-account",
     page: 1,
-    limit: 8,
+    limit: 10,
   });
 
   return <PageLayout accountId={accountId} page={page} limit={limit} />;
