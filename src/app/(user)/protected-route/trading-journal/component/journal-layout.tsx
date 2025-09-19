@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { TradeCalendarWidget } from "../../dashboard/components/trade-calendar.widget";
-import { trades } from "@/components/ui/landing-layout/tabs-section/calendar/mock/data";
 import { useGetTrades } from "@/hooks/trades/queries";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
@@ -19,7 +18,7 @@ const JournalLayout = () => {
   );
 
   if (isLoading) {
-    return <LayoutSkeleton />
+    return <LayoutSkeleton />;
   }
 
   if (isError) {

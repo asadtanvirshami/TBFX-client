@@ -25,13 +25,11 @@ import {
 import { LucideLoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { useRouter } from "next/navigation";
 import { handleError } from "@/utils/error-handler";
 import { extractErrorMessage } from "@/utils/error-extractor";
 import { ResetPasswordInput } from "@/hooks/auth/types";
 
 const ResetForm = () => {
-  const router = useRouter();
   const resetPassword = useResetPassword();
   // Get token from URL
   const url = new URL(window.location.href);

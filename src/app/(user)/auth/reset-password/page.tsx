@@ -1,13 +1,10 @@
 "use client";
 
 import React from "react";
-import { useTheme } from "next-themes";
-
 import ShootingStars from "@/components/ui/shooting-stars";
 import ResetForm from "./form/reset-from";
 
 const SignInPage = () => {
-  const { theme } = useTheme();
 
   return (
     <React.Fragment>

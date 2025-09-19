@@ -3,7 +3,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -37,7 +36,7 @@ const getBadgeColor = (data: StrategyData) => {
 
 export default function StrategyCard({ strategy }: { strategy: StrategyData }) {
   const dispatch = useDispatch();
-  const { title, comment, type, price, currency, hasPrice, isPremium } =
+  const { title, comment, type, price, currency, hasPrice } =
     strategy;
 
   return (

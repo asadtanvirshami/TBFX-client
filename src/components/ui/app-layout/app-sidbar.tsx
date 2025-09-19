@@ -2,11 +2,8 @@
 
 import * as React from "react";
 import {
-  Award,
   Book,
-  BookOpen,
   Calculator,
-  CandlestickChart,
   Dock,
   Frame,
   LifeBuoy,

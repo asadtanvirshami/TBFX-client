@@ -8,8 +8,6 @@ import StrategySkeleton from "./strategy-skeleton";
 import { StrategyData, StrategyQueries } from "@/types/strategy-type/type";
 import StrategyForm from "../form/strategy-form";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@radix-ui/react-dialog";
-import { useSelector } from "react-redux";
 import ViewStrategy from "./view-strategy";
 
 const PageLayout = () => {
@@ -21,7 +19,7 @@ const PageLayout = () => {
     limit: pageSize,
     filters: { type: "" },
   });
-  const { data, isError, isLoading } = useGetStrategies(quries);
+  const { data, isLoading } = useGetStrategies(quries);
 
   useEffect(() => {
     if (data && data.data) {

@@ -3,7 +3,6 @@
 import { getColumns } from "@/components/ui/landing-layout/tabs-section/trades/trades-table/columns";
 import { TradesTable } from "@/components/ui/landing-layout/tabs-section/trades/trades-table/table";
 import { useGetTrades } from "@/hooks/trades/queries";
-import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import LayoutSkeleton from "./layout-skeleton";
 
@@ -16,7 +15,6 @@ export default function TradesList({
   page: number;
   limit: number;
 }) {
-  const router = useRouter();
   const { data, isLoading } = useGetTrades(accountId, page, limit);
   const columns = useMemo(() => getColumns(), []);
 

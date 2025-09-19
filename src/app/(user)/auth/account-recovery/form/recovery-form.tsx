@@ -26,12 +26,10 @@ import {
 import { LucideLoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { useRouter } from "next/navigation";
 import { handleError } from "@/utils/error-handler";
 import { extractErrorMessage } from "@/utils/error-extractor";
 
 const RecoveryForm = () => {
-  const router = useRouter();
   const account_recovery = useAccountRecovery();
 
   const form = useForm<RecoveryFormData>({
