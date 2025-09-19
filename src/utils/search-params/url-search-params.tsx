@@ -12,6 +12,7 @@ export function getSearchParams<T extends Record<string, string | number>>(
         : searchParams[key];
 
     if (value !== null && value !== undefined) {
+      // Convert to number if default is number
       params[key] =
         typeof defaults[key] === "number"
           ? (Number(value) as T[typeof key])
