@@ -1,3 +1,4 @@
+// src/app/(user)/protected-route/operations/page.tsx
 import {
   HydrationBoundary,
   dehydrate,
@@ -7,22 +8,29 @@ import api from "@/api/axios";
 import { apiEndpoints } from "@/api/endpoints";
 import { getSearchParams } from "@/utils/search-params/url-search-params";
 import PageLayout from "./components/page-layout";
-import { ReactNode } from "react";
+
 interface TradesPageProps {
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
-export default async function TradesPage({
-  searchParams,
-}: TradesPageProps): Promise<ReactNode> {
-  // normalize searchParams: take first value if array
+// Helper to normalize Next.js searchParams
+function normalizeSearchParams(
+  params?: Record<string, string | string[] | undefined>
+): Record<string, string> {
   const normalized: Record<string, string> = {};
-  Object.entries(searchParams ?? {}).forEach(([key, value]) => {
+  Object.entries(params ?? {}).forEach(([key, value]) => {
     if (Array.isArray(value)) normalized[key] = value[0];
     else if (value !== undefined) normalized[key] = value;
   });
+  return normalized;
+}
 
-  const { accountId, page, limit } = getSearchParams(normalized, {
+export default async function TradesPage({ searchParams }: TradesPageProps) {
+  // Normalize searchParams
+  const normalizedParams = normalizeSearchParams(searchParams);
+
+  // Extract typed params with defaults
+  const { accountId, page, limit } = getSearchParams(normalizedParams, {
     accountId: "default-account",
     page: 1,
     limit: 8,
@@ -31,6 +39,7 @@ export default async function TradesPage({
   // Create a fresh query client on the server
   const queryClient = new QueryClient();
 
+  // Prefetch trades data on the server
   await queryClient.prefetchQuery({
     queryKey: ["trades", accountId, page, limit],
     queryFn: async () => {
