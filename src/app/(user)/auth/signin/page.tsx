@@ -11,7 +11,7 @@ import OfferSection from "@/components/ui/landing-layout/offer-section";
 import ShootingStars from "@/components/ui/shooting-stars";
 
 const SignInPage = () => {
-  // const { theme } = useTheme();
+
 
   return (
     <React.Fragment>
@@ -28,13 +28,6 @@ const SignInPage = () => {
         <div className="relative z-10 grid md:grid-cols-1 lg:grid-cols-5 max-w-8xl mx-auto bg-blur overflow-hidden">
           {/* Left Side (Logo & Text) */}
           <div className="hidden rounded-lg md:flex flex-col items-center justify-center p-12 lg:col-span-3 bg-gray-100 bg-transparent">
-            {/* <Image
-              src={theme === "dark" ? dark_logo : light_logo}
-              alt="Logo"
-              width={320}
-              height={320}
-              className="w-80"
-            /> */}
             <OfferSection />
           </div>
 

@@ -6,13 +6,12 @@ import StrategyHeader from "./tab-menu";
 import { useGetStrategies } from "@/hooks/strategies/queries";
 import StrategySkeleton from "./strategy-skeleton";
 import { StrategyData, StrategyQueries } from "@/types/strategy-type/type";
-import StrategyForm from "../form/strategy-form";
 import { Button } from "@/components/ui/button";
 import ViewStrategy from "./view-strategy";
 
 const PageLayout = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
   const [strategyData, setStrategyData] = useState<StrategyData[]>([]);
   const [quries, setQueries] = useState<StrategyQueries>({
     page: 1,
@@ -78,7 +77,6 @@ const PageLayout = () => {
           </div>
         )}
       </div>
-      <StrategyForm buttonVisibility={false} />
       <ViewStrategy />
     </Fragment>
   );

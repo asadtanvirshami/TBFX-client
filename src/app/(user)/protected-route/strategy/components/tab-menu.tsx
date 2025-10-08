@@ -5,8 +5,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { openForm } from "@/redux/slices/ui/slice";
 import { StrategyData, StrategyQueries } from "@/types/strategy-type/type";
+import { openDialog } from "@/redux/slices/dialog/dialog-slice";
 
 interface TabMenuProps {
   data: StrategyData[];
@@ -43,8 +43,18 @@ const AddButton = () => {
   const dispatch = useDispatch();
   return (
     <Button
+      className="w-fit"
       variant={"success"}
-      onClick={() => dispatch(openForm("strategy-form"))}
+      onClick={() =>
+        dispatch(
+          openDialog({
+            formType: "strategy",
+            mode: "add",
+            data: null,
+            size: "lg",
+          })
+        )
+      }
     >
       Add Strategy
       <PlusCircle />
@@ -54,7 +64,7 @@ const AddButton = () => {
 
 const StrategyHeader = ({ data, setData, setQueries }: TabMenuProps) => {
   return (
-    <div className="flex justify-between gap-2">
+    <div className="grid md:flex lg:flex grid-cols-1 md:grid-cols-2 lg:grid-cols-2 justify-between gap-2">
       <TabMenu data={data} setData={setData} setQueries={setQueries} />
       <AddButton />
     </div>

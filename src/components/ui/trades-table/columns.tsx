@@ -3,6 +3,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
+import { useDispatch } from "react-redux";
+import { openDialog } from "@/redux/slices/dialog/dialog-slice";
 
 // Define the shape of your data (from your Trades entity)
 export type Trade = {
@@ -72,44 +74,55 @@ export function getColumns(): ColumnDef<Trade>[] {
         </span>
       ),
     },
-    {
-      accessorKey: "openDate",
-      header: "Open Date",
-      enableSorting: true,
-      cell: ({ row }) =>
-        row.original.openDate
-          ? moment(row.original.openDate).format("YYYY-MM-DD HH:mm")
-          : "-",
-    },
-    {
-      accessorKey: "closeDate",
-      header: "Close Date",
-      enableSorting: true,
-      cell: ({ row }) =>
-        row.original.closeDate
-          ? moment(row.original.closeDate).format("YYYY-MM-DD HH:mm")
-          : "-",
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-    },
-    {
-      accessorKey: "slippage",
-      header: "Slippage",
-    },
+    // {
+    //   accessorKey: "openDate",
+    //   header: "Open Date",
+    //   enableSorting: true,
+    //   cell: ({ row }) =>
+    //     row.original.openDate
+    //       ? moment(row.original.openDate).format("YYYY-MM-DD HH:mm")
+    //       : "-",
+    // },
+    // {
+    //   accessorKey: "closeDate",
+    //   header: "Close Date",
+    //   enableSorting: true,
+    //   cell: ({ row }) =>
+    //     row.original.closeDate
+    //       ? moment(row.original.closeDate).format("YYYY-MM-DD HH:mm")
+    //       : "-",
+    // },
+    // {
+    //   accessorKey: "status",
+    //   header: "Status",
+    // },
+    // {
+    //   accessorKey: "slippage",
+    //   header: "Slippage",
+    // },
     {
       id: "actions",
       header: "Actions",
-      cell: ({ row }) => (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => alert(`Viewing trade ${row.original.id}`)}
-        >
-          View
-        </Button>
-      ),
+      cell: ({ row }) => {
+        const dispatch = useDispatch();
+        return (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              dispatch(
+                openDialog({
+                  formType: "trade",
+                  mode: "edit",
+                  data: row.original,
+                })
+              );
+            }}
+          >
+            View
+          </Button>
+        );
+      },
     },
   ];
 }

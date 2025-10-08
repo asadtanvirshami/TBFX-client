@@ -27,18 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${redhat.variable} ${poppins.variable} antialiased`}
-      >
+      <link rel="preconnect" href="https://www.google.com" />
+      <link rel="preconnect" href="https://www.gstatic.com" crossOrigin="" />
+
+      <body className={`${redhat.variable} ${poppins.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-          >
-          <LanguageProvider>
-          {children}
-        </LanguageProvider>
+        >
+          <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

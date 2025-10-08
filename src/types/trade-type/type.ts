@@ -1,3 +1,5 @@
+import { TradeAcc } from "../account-type/type";
+
 export interface Trade {
   id: string;
   date: string; // ISO format e.g. "2025-07-01T09:30:00Z"
@@ -24,6 +26,5 @@ export interface TradeRaw {
   strategyTag: string | null;
   slippage: number | null;
   note: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  TradeAccounts: { id: string | null } | null;
 }

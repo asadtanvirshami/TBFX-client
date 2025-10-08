@@ -48,7 +48,7 @@ const SwitchAccountSelector = () => {
       dispatch(setAccountState({ accounts: null, isLoading: false }));
     }
   }, [accounts]);
-  
+
   const handleAccountSwitch = (accountId: string) => {
     selectAccount.mutate(
       { id: accountId },
@@ -83,7 +83,7 @@ const SwitchAccountSelector = () => {
         <SelectGroup>
           <SelectLabel>Accounts</SelectLabel>
           {accounts?.data?.map((account: TradeAcc, index: number) => (
-            <>
+            <div key={account.id}>
               <SelectItem
                 key={account.id}
                 value={account.id}
@@ -101,7 +101,7 @@ const SwitchAccountSelector = () => {
                   <PlusCircle /> Add MT4/MT5 Account
                 </Button>
               )}
-            </>
+            </div>
           ))}
         </SelectGroup>
       </SelectContent>

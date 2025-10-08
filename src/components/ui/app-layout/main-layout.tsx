@@ -11,6 +11,7 @@ import Footer from "../footer";
 import ReactQueryClientProvider from "@/provider/react-query";
 import StoreProvider from "@/redux/store-provider";
 import AppHeader from "./app-header";
+import AppDialog from "./app-dialog";
 
 const MemoizedSidebar = React.memo(AppSidebar);
 const MemoizedHeader = React.memo(Header);
@@ -24,8 +25,9 @@ export default function MainLayout({
   const path = usePathname();
   const isAuthPath = path.startsWith("/auth");
   const isProtectedRoute = path.startsWith("/protected-route/");
+    const isOnboardingRoute = path.startsWith("/onboarding/");
 
-  if (isAuthPath) {
+  if (isAuthPath || isOnboardingRoute) {
     return (
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
@@ -37,7 +39,7 @@ export default function MainLayout({
     );
   }
 
-  if (isProtectedRoute) {
+  if (isProtectedRoute ) {
     return (
       <StoreProvider>
         <ReactQueryClientProvider>
@@ -48,6 +50,7 @@ export default function MainLayout({
               {children}
             </main>
           </SidebarProvider>
+          <AppDialog />
         </ReactQueryClientProvider>
       </StoreProvider>
     );

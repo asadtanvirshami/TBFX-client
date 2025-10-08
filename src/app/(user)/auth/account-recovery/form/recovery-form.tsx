@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { recoverySchema } from "@/schemas/auth-schema/schema";
@@ -20,6 +20,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -28,10 +29,11 @@ import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { handleError } from "@/utils/error-handler";
 import { extractErrorMessage } from "@/utils/error-extractor";
+import RecaptchaV2, { RecaptchaV2Handle } from "@/lib/recaptcha";
 
 const RecoveryForm = () => {
   const account_recovery = useAccountRecovery();
-
+  const recaptchaRef = useRef<RecaptchaV2Handle>(null);
   const form = useForm<RecoveryFormData>({
     resolver: yupResolver(recoverySchema),
     defaultValues: {
@@ -135,7 +137,7 @@ const RecoveryForm = () => {
           </form>
         </Form>
 
-        <Separator className="my-4" />
+        <Separator className="mt-5 w-[0.5px]" />
 
         <div className="flex justify-between mt-4">
           <Link
@@ -145,6 +147,11 @@ const RecoveryForm = () => {
             Already have an account.
           </Link>
         </div>
+        <CardFooter>
+          <div className="w-full flex justify-center">
+            <RecaptchaV2 ref={recaptchaRef} variant="checkbox" />
+          </div>
+        </CardFooter>
       </CardContent>
     </Card>
   );

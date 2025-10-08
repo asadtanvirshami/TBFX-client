@@ -17,7 +17,9 @@ export const useGetTradesAndStats = () => {
         apiEndpoints.dashboard.stats(trade_account ? trade_account : ""),
         {
           params: {
-            accountId: trade_account,
+            filters: {
+              accountId: trade_account,
+            },
           },
         }
       );

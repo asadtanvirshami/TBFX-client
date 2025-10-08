@@ -6,6 +6,7 @@ import userReducer from "./slices/user/user-slice";
 import accountReducer from "./slices/trade-account/trade_account-slice";
 import uiReducer from "./slices/ui/slice";
 import strategyReducer from "./slices/strategy/slice";
+import dialogReducer from "./slices/dialog/dialog-slice";
 
 // Persist config for redux-persist
 const persistConfig = {
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   user: persistedUserReducer,
   trade_account: accountReducer,
   strategy: strategyReducer,
+  dialog: dialogReducer,
   ui: uiReducer,
 });
 

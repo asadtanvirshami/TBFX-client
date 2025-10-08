@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 
 export const useVerifyJWT = () => {
   const token = Cookies.get("token"); // Adjust key if your cookie is named differently
-  console.log(token,"Toklem");
   
   const {
     data: verification,

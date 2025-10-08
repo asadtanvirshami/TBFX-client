@@ -2,6 +2,7 @@ export interface LoginInput {
   [key: string]: string;
   email: string;
   password: string;
+  captcha: string;
 }
 
 export interface SignupInput {
@@ -10,11 +11,13 @@ export interface SignupInput {
   lastName: string;
   email: string;
   password: string;
+  captcha: string;
 }
 
 export interface GooginSigninInput {
   [key: string]: string;
   token: string;
+  captcha: string;
 }
 export interface OtpInput {
   [key: string]: string;
