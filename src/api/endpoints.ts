@@ -1,3 +1,5 @@
+import { sub } from "date-fns";
+
 export const apiEndpoints = {
   auth: {
     signin: "/auth/signin",
@@ -11,6 +13,18 @@ export const apiEndpoints = {
     forgot_password: "/auth/forgot-password",
     verifyJWT: "/auth/verify-session",
     verify: "/auth/verify",
+  },
+  billing: {
+    base: "/billing",
+    createCheckoutSession: "/billing/choose-plan",
+    delete: (id: string) => `/billing/delete/${id}`,
+    toggle_renewCycle: "/billing/toggle-renew-cycle",
+    upgrade: "/billing/upgrade-subscription",
+    validateCoupon: "/coupons/apply",
+    sync: "/billing/sync",
+    invoices: "/billing/invoices",
+    currentSubscription: "/billing/current-subscription",
+    cancelSubscription: "/billing/cancel",
   },
   users: {
     base: "/user",
@@ -52,6 +66,6 @@ export const apiEndpoints = {
   },
   dashboard: {
     base: "/dashboard",
-    stats: (id: string) => `/dashboard/stats/${id}`,
+    stats: (id: string) => `/dashboard/stats/?accountId=${id}`,
   },
 };

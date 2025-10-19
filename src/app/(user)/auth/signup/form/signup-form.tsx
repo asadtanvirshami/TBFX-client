@@ -73,9 +73,12 @@ const SignUpForm = () => {
   const onSubmit = async (data: SignUpFormData) => {
     const token = await recaptchaRef.current?.execute();
     if (!token) throw new Error("Captcha missing");
+    console.log(data, token);
+    
     signup.mutate(
       { ...data, captcha: token },
       {
+
         onSuccess: (res) => {
           if (res?.success === false) {
             setError("root", {
@@ -89,6 +92,7 @@ const SignUpForm = () => {
           router.push("/auth/signin");
         },
         onError: (error) => {
+          recaptchaRef.current?.reset();
           handleError(error, {
             context: "SignupForm",
             notify: false,

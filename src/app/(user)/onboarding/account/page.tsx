@@ -3,14 +3,14 @@
 import React from "react";
 
 import Image from "next/image";
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes";
 
 import mt4 from "../../../../../public/assets/mt4.png";
 import mt5 from "../../../../../public/assets/mt5.png";
 import SimpleForm from "@/components/form/trade-account/simple-form";
 import { cn } from "@/lib/utils";
 const AccountRecoveryPage = () => {
-  const { theme } = useTheme();
+  // const { theme } = useTheme();
   return (
     <div className="relative flex items-center justify-center h-screen w-full overflow-hidden ">
       {/* Animated Background */}

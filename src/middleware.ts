@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyJWTServer } from "@/lib/auth/verifyJWTServer";
 
 const PUBLIC_ROUTES = ["/login", "/signup", "/"];
-const PROTECTED_PREFIXES = ["/dashboard", "/protected-route"];
+const PROTECTED_PREFIXES = ["/dashboard", "/protected-route", "/plans/success"];
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("accessToken")?.value || "";
@@ -25,8 +25,20 @@ export async function middleware(req: NextRequest) {
     req.nextUrl.pathname.startsWith(prefix)
   );
 
+  const isPlans = PROTECTED_PREFIXES.some((prefix) =>
+    req.nextUrl.pathname.startsWith(prefix)
+  );
+
   if (isProtected && (!session || !session.valid)) {
     return NextResponse.redirect(new URL("/auth/signin", req.url));
+  }
+
+  if (isPlans && (!session || !session.valid)) {
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
+  }
+
+  if (isProtected && session && !session.valid) {
+    return NextResponse.redirect(new URL("/plans", req.url));
   }
 
   return NextResponse.next();

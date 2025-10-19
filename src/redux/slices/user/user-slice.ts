@@ -2,11 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
   email: string;
-  sub: string;
+  id: string;
   firstName: string;
   lastName: string;
   role: string;
-  avatar: string;
+  avatar_url: string;
+  plan?: string;
+  activeTradeAccountId?: string | null;
+  blocked?: boolean;
 }
 
 interface AuthState {
@@ -35,6 +38,9 @@ const authSlice = createSlice({
       state.error = null;
       state.isAuthenticated = true;
     },
+    upgradeUserPlan(state, action: PayloadAction<string>) {
+      state.user.plan = action.payload;
+    },
     loginFailure(state, action: PayloadAction<string>) {
       state.user = null;
       state.error = action.payload;
@@ -48,7 +54,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginSuccess, updateProfile, loginFailure, logoutUser } =
-  authSlice.actions;
+export const {
+  loginSuccess,
+  updateProfile,
+  loginFailure,
+  logoutUser,
+  upgradeUserPlan,
+} = authSlice.actions;
 
 export default authSlice.reducer;

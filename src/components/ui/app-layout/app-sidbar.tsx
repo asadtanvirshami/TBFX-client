@@ -124,8 +124,8 @@ const AppSidebarComponent = (props: React.ComponentProps<typeof Sidebar>) => {
             user={{
               name: User.firstName + " " + User.lastName,
               email: User.email,
-              avatar: User.avatar || "",
-              sub: User.sub || "",
+              avatar: User.avatar_url || "",
+              sub: User.id || "",
             }}
           />
         ) : null}

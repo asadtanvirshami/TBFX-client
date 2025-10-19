@@ -44,7 +44,7 @@ const ChangePassword = ({
     (state: RootState) => state.ui.forms["change-password"]
   );
 
-  const userId = useSelector((state: RootState) => state.user.user?.sub);
+  const userId = useSelector((state: RootState) => state.user.user?.id);
   const passwordMutation = useChangePassword();
 
   const form = useForm<ChangePasswordData>({

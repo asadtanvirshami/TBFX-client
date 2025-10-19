@@ -34,7 +34,7 @@ const UploadAvatar = () => {
     try {
       setUploading(true);
       updateAvatar.mutate(
-        { avatar: file, id: user?.sub || "" },
+        { avatar: file, id: user?.id || "" },
         {
           onSuccess: (res) => {
             if (res?.success) {
@@ -43,9 +43,9 @@ const UploadAvatar = () => {
                   firstName: user?.firstName || "",
                   lastName: user?.lastName || "",
                   email: user?.email || "",
-                  sub: user?.sub || "",
+                  id: user?.id || "",
                   role: user?.role || "",
-                  avatar: res?.avatarUrl || "",
+                  avatar_url: res?.avatarUrl || "",
                 })
               );
             }
@@ -90,7 +90,7 @@ const UploadAvatar = () => {
           ) : (
             <AvatarImage
               src={
-                selectedFile ? URL.createObjectURL(selectedFile) : user.avatar
+                selectedFile ? URL.createObjectURL(selectedFile) : user.avatar_url
               }
               alt={user.firstName}
             />

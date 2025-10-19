@@ -14,7 +14,8 @@ import {
 
 export type SigninResponse = {
   success: boolean;
-  accessToken?: string; // if your API returns JWT instead of setting cookie
+  accessToken?: string;
+  redirectTo?: string // if your API returns JWT instead of setting cookie
 };
 
 function makeIdempotencyKey() {
@@ -24,12 +25,12 @@ function makeIdempotencyKey() {
 }
 
 export const useSignin = () =>
-  useMutation<SigninResponse, any, LoginInput>({
+  useMutation<SigninResponse, LoginInput, LoginInput>({
     mutationKey: ["auth", "signin"],
     mutationFn: async (input) => {
       const idKey = makeIdempotencyKey();
-
-      // Abort in 15s to avoid zombie requests
+      console.log(input);
+      
       const controller = new AbortController();
       const t = setTimeout(() => controller.abort(), 15_000);
 
@@ -60,7 +61,6 @@ export const useSignin = () =>
         clearTimeout(t);
       }
     },
-
     // Don’t retry on auth/validation; do limited retries on transient errors
     retry(failureCount, error: any) {
       const status = error?.response?.status;
@@ -88,17 +88,53 @@ export const useGoogleSignin = () =>
   });
 
 export const useSignup = () =>
-  useMutation({
-    mutationFn: (input: SignupInput) =>
-      api
-        .post(apiEndpoints.auth.signup, sanitizeFlatStrings(input), {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "x-recaptcha-token": input.recaptchaToken,
-          },
-        })
-        .then((res) => res.data),
+  useMutation<{ success: boolean; message: string }, SignupInput, SignupInput>({
+    mutationKey: ["auth", "signup"],
+    mutationFn: async (input) => {
+      const idKey = makeIdempotencyKey();
+
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 15_000);
+
+      try {
+        // Don’t send captcha token inside body; keep it in header only.
+        const payload = {
+          email: input.email.trim(),
+          password: input.password,
+          firstName: input.firstName.trim(),
+          lastName: input.lastName.trim(),
+        };
+
+        const res = await api.post<{ success: boolean; message: string }>(
+          apiEndpoints.auth.signup,
+          sanitizeFlatStrings(payload),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "x-recaptcha-token": input.captcha,
+              "idempotency-key": idKey,
+            },
+            withCredentials: true, // allow server to set HttpOnly auth cookie
+            signal: controller.signal,
+          }
+        );
+
+        return res.data 
+      } finally {
+        clearTimeout(t);
+      }
+    },
+    // Don’t retry on auth/validation; do limited retries on transient errors
+    retry(failureCount, error: any) {
+      const status = error?.response?.status;
+      if (status && [400, 401, 403, 422].includes(status)) return false;
+      return failureCount < 2; // at most 2 retries
+    },
+    retryDelay(attempt) {
+      // jittered exponential backoff
+      return Math.min(1000 * 2 ** attempt, 5000) + Math.random() * 300;
+    },
   });
 
 export const useVerifyOtp = () =>

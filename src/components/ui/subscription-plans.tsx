@@ -26,19 +26,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { CouponInfo } from "@/types/billing-type/type";
+import { useSelector } from "react-redux";
 
 // Types you can adapt to your app
 export type PlanCode = "free" | "standard" | "elite";
 
-export type CouponInfo = {
-  code: string;
-  type: "percent" | "amount"; // amount in cents if amount
-  value: number;
-  applies_to: PlanCode | "any";
-  label?: string; // e.g., "Student 50%"
-};
-
 export interface SubscriptionCardsProps {
+  isLoading?: boolean;
   billingCycle?: "month" | "year";
   defaultCycle?: "month" | "year";
   // Prices in cents for monthly billing; yearly price auto-computed with discount unless provided
@@ -90,6 +85,7 @@ const features = {
 } as const;
 
 export default function SubscriptionCards({
+  isLoading = false,
   prices,
   yearlyDiscountPercent = 20,
   defaultCycle = "month",
@@ -239,9 +235,11 @@ export default function SubscriptionCards({
     const price = discounted(plan, base);
     const per = cycle === "month" ? "/mo" : "/yr";
     const isFree = plan === "free";
+    const { user } = useSelector((state: any) => state.user);
 
     const planFeatures = features[plan];
-
+    console.log(user);
+    
     return (
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
         <Card
@@ -304,11 +302,20 @@ export default function SubscriptionCards({
 
             <div className="mt-6">
               {isFree ? (
-                <Button className="w-full" onClick={() => onChooseFree()}>
-                  Start Free
+                <Button
+                  disabled={isLoading}
+                  className="w-full"
+                  onClick={() => onChooseFree()}
+                >
+                  {user?.plan?.toLowerCase() === "standard"
+                    ? "Downgrade to Free"
+                    : user?.plan?.toLowerCase() === "elite"
+                    ? "Downgrade to Free"
+                    : "Start Free"}
                 </Button>
               ) : (
                 <Button
+                  disabled={isLoading}
                   className="w-full"
                   onClick={() =>
                     onCheckout(plan as Exclude<PlanCode, "free">, {
@@ -317,7 +324,11 @@ export default function SubscriptionCards({
                     })
                   }
                 >
-                  {plan === "standard" ? "Choose Standard" : "Choose Elite"}
+                  {user?.plan?.toLowerCase() === plan
+                    ? "Current Plan"
+                    : user?.plan === "elite" && plan === "standard"
+                    ? "Downgrade to Standard"
+                    : "Upgrade to " + title}
                 </Button>
               )}
             </div>

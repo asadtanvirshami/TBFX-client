@@ -6,8 +6,6 @@ const VERSION = "v1";
 const PRIVACY = "public";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8080";
 export const verifyJWTServer = async (accessToken: string) => {
-  console.log(accessToken);
-
   const res = await fetch(
     `${BASE_URL}/${PRIVACY}/api/${VERSION}${apiEndpoints.auth.verifyJWT}`,
     {
@@ -19,6 +17,10 @@ export const verifyJWTServer = async (accessToken: string) => {
       cache: "no-store",
       credentials: "include",
     }
-  );
+  )
+  if(!res.ok) {
+    throw new Error('Failed to verify JWT');
+  }
+
   return res.json();
 };

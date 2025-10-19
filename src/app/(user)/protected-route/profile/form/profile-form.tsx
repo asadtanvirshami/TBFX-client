@@ -33,7 +33,7 @@ const ProfileForm = () => {
   const form = useForm<UpdateProfileData>({
     resolver: yupResolver(updateProfileSchema),
     defaultValues: {
-      id: user?.sub || "",
+      id: user?.id || "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       email: user?.email || "",
@@ -48,7 +48,7 @@ const ProfileForm = () => {
   } = form;
 
   const onSubmit = async (data: UpdateProfileData) => {
-    if (!user?.sub || !data.id) {
+    if (!user?.id || !data.id) {
       setError("root", { type: "manual", message: "User ID missing" });
       return;
     }

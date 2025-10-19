@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, use } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import type { RootState } from "@/redux/store";
 import { useGetTradesAndStats } from "@/hooks/dashboard/queries";
@@ -8,6 +8,8 @@ import { useGetTradesAndStats } from "@/hooks/dashboard/queries";
 import AccountSignin from "../../../../components/form/account-signin";
 import DashboardSkeleton from "./components/dashboard-skeleton";
 import DashboardLayout from "./components/dashboard-layout";
+import { UserPlan } from "@/types/user-type/type";
+import { redirect } from "next/navigation";
 
 /**
  * Dashboard Component
@@ -35,7 +37,6 @@ const Dashboard: React.FC = () => {
   if (isAccountLoading || isTradesLoading) {
     return <DashboardSkeleton />;
   }
-
   if (isTradesError) {
     return null;
   }

@@ -24,6 +24,7 @@ import { PlusCircle } from "lucide-react";
 import { openForm } from "@/redux/slices/ui/slice";
 import AccountSignin from "@/components/form/account-signin";
 import { ModeToggle } from "../theme-provider/toggle-button";
+import { useUserSubscription } from "@/helpers/useSubscription";
 
 const SwitchAccountSelector = () => {
   const dispatch = useDispatch();
@@ -110,20 +111,19 @@ const SwitchAccountSelector = () => {
 };
 
 const AppHeader = () => {
+  const { isElite, isStandard } = useUserSubscription();
+  console.log("isElite", isElite);
+
   return (
     <React.Fragment>
-      <div className="w-full border-b bg-card sticky  top-0">
-        <div className="w-full flex items-center justify-between ">
-          <div>
-            <SidebarTrigger />
-          </div>
-          <div className="flex items-center gap-2 justify-end">
-            <ModeToggle />
-            <SwitchAccountSelector />
-          </div>
+      <div className="w-full ">
+        <div className="flex items-center gap-2 justify-end">
+          <ModeToggle />
+          <SwitchAccountSelector />
+          {/* {(isElite || isStandard) && <SwitchAccountSelector />} */}
         </div>
       </div>
-      <AccountSignin buttonVisibility={false} />
+      {(isElite || isStandard) && <AccountSignin buttonVisibility={false} />}
     </React.Fragment>
   );
 };
