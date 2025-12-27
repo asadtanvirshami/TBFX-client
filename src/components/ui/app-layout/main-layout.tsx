@@ -3,7 +3,11 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import { SidebarProvider } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-layout/app-sidbar";
 import Header from "../header";
 import Footer from "../footer";
@@ -11,6 +15,7 @@ import Footer from "../footer";
 import ReactQueryClientProvider from "@/provider/react-query";
 import StoreProvider from "@/redux/store-provider";
 import AppHeader from "./app-header";
+import AppDialog from "./app-dialog";
 
 const MemoizedSidebar = React.memo(AppSidebar);
 const MemoizedHeader = React.memo(Header);
@@ -24,8 +29,9 @@ export default function MainLayout({
   const path = usePathname();
   const isAuthPath = path.startsWith("/auth");
   const isProtectedRoute = path.startsWith("/protected-route/");
+  const isPlansRoute = path.startsWith("/plans");
 
-  if (isAuthPath) {
+  if (isAuthPath || isPlansRoute) {
     return (
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
@@ -42,12 +48,16 @@ export default function MainLayout({
       <StoreProvider>
         <ReactQueryClientProvider>
           <SidebarProvider>
-            <MemoizedSidebar />
-            <main className="w-full flex-col flex h-full">
-              <AppHeader />
-              {children}
-            </main>
+            <AppSidebar />
+            <SidebarInset>
+              <header className="bg-card sticky z-50 top-0 flex h-12 py-1 shrink-0 items-center gap-2 border-b px-4">
+                <SidebarTrigger className="-ml-1" />
+                <AppHeader />
+              </header>
+              <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+            </SidebarInset>
           </SidebarProvider>
+          <AppDialog />
         </ReactQueryClientProvider>
       </StoreProvider>
     );

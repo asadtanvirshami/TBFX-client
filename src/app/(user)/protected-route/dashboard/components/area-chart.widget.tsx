@@ -108,6 +108,7 @@ const AreaChartWidget = React.memo(({ data }: AreaChartWidgetProps) => {
                     <stop offset="95%" stopColor="#ff758f" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
+
                 <CartesianGrid vertical={false} strokeOpacity={0.05} />
                 <XAxis
                   dataKey="date"
@@ -117,6 +118,7 @@ const AreaChartWidget = React.memo(({ data }: AreaChartWidgetProps) => {
                   minTickGap={32}
                   tickFormatter={formatDate}
                 />
+
                 <ChartTooltip
                   cursor={false}
                   content={
@@ -126,6 +128,8 @@ const AreaChartWidget = React.memo(({ data }: AreaChartWidgetProps) => {
                     />
                   }
                 />
+
+                {/* Profit Line */}
                 <Area
                   dataKey="profit"
                   type="monotone"
@@ -133,8 +137,9 @@ const AreaChartWidget = React.memo(({ data }: AreaChartWidgetProps) => {
                   stroke="#74c69d"
                   strokeWidth={2}
                   isAnimationActive={false}
-                  stackId="a"
                 />
+
+                {/* Loss Line */}
                 <Area
                   dataKey="loss"
                   type="monotone"
@@ -142,8 +147,8 @@ const AreaChartWidget = React.memo(({ data }: AreaChartWidgetProps) => {
                   stroke="#ff758f"
                   strokeWidth={2}
                   isAnimationActive={false}
-                  stackId="a"
                 />
+
                 <ChartLegend content={<ChartLegendContent />} />
               </AreaChart>
             </ChartContainer>

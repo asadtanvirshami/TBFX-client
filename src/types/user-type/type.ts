@@ -12,6 +12,21 @@ export interface User {
   token: string;
   role: string;
   blocked: boolean;
-
+  plan: UserPlan;
+  
   activeTradeAccountId: string;
+}
+
+export interface UpdateProfileData {
+  [key: string]: string;
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export enum UserPlan {
+  FREE = "FREE",
+  STANDARD = "STANDARD",
+  ELITE = "ELITE",
 }

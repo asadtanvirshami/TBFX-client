@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ProfileView = () => {
+const TradeAccounts = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const ProfileView = () => {
   )
 }
 
-export default ProfileView
+export default TradeAccounts

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signInSchema } from "@/schemas/auth-schema/schema";
 import { SignInFormData } from "@/types/auth-type/type";
-import { useGoogleSignin } from "@/hooks/auth/use-auth";
+// import { useGoogleSignin } from "@/hooks/auth/use-auth";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -19,22 +19,28 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { LucideLoaderCircle } from "lucide-react";
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { loginSuccess } from "@/redux/slices/user/user-slice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { GoogleCredentialResponse, GoogleLogin } from "@react-oauth/google";
+// import { GoogleCredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { handleError } from "@/utils/error-handler";
 import { useUser } from "@/hooks/user/use-user";
 import { useSignin } from "@/hooks/auth/use-auth";
 import { extractErrorMessage } from "@/utils/error-extractor";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 
+import dark_logo from "../../../../../../public/assets/dark.png";
+import light_logo from "../../../../../../public/assets/light.png";
+import RecaptchaV2, { RecaptchaV2Handle } from "@/lib/recaptcha";
 /**
  * SignInForm
  *
@@ -46,9 +52,12 @@ import { extractErrorMessage } from "@/utils/error-extractor";
  * @returns {ReactElement} Form element
  */
 export const SignInForm = () => {
+  const { theme } = useTheme();
   const router = useRouter();
   const signin = useSignin();
-  const googleSignin = useGoogleSignin();
+  // const googleSignin = useGoogleSignin();
+  const recaptchaRef = useRef<RecaptchaV2Handle>(null);
+
   const dispatch = useDispatch();
   const { refetch } = useUser();
   const form = useForm<SignInFormData>({
@@ -72,8 +81,11 @@ export const SignInForm = () => {
    * @returns {Promise<void>}
    */
   const onSubmit = async (data: SignInFormData) => {
+    const token = await recaptchaRef.current?.execute();
+    if (!token) throw new Error("Captcha missing");
+
     signin.mutate(
-      { email: data.email, password: data.password },
+      { email: data.email, password: data.password, captcha: token },
       {
         /**
          * @description Handle successful login response
@@ -82,6 +94,7 @@ export const SignInForm = () => {
          */
         onSuccess: async (data) => {
           if (data.accessToken === null || data.success === false) {
+            recaptchaRef.current?.reset();
             setError("email", {
               type: "server",
             });
@@ -91,18 +104,17 @@ export const SignInForm = () => {
             });
             return;
           }
-          
+
           const result = await refetch();
-
           if (result.isError) return;
+          if (result.data === null) return;
 
-          if (result.data.valid === true) {
-            dispatch(loginSuccess(result.data.user));
-            form.reset();
-            router.push("/protected-route/dashboard");
-          }
+          dispatch(loginSuccess(result.data));
+          form.reset();
+          router.push(data.redirectTo);
         },
         onError: (error) => {
+          recaptchaRef.current?.reset();
           handleError(error, {
             context: "Signin-Form",
             notify: false,
@@ -123,64 +135,74 @@ export const SignInForm = () => {
    * @param {GoogleCredentialResponse} credentialResponse Response from Google
    * @returns {Promise<void>}
    */
-  const handleGoogleSuccess = async (
-    credentialResponse: GoogleCredentialResponse
-  ) => {
-    if (!credentialResponse?.credential) return;
+  // const handleGoogleSuccess = async (
+  //   credentialResponse: GoogleCredentialResponse
+  // ) => {
+  //   if (!credentialResponse?.credential) return;
+  //   const token = await recaptchaRef.current?.execute();
+  //   if (!token) throw new Error("Captcha missing");
 
-    const googleCredentials = credentialResponse.credential;
-    googleSignin.mutate(
-      { token: googleCredentials },
-      {
-        onSuccess: async (data) => {
-          if (data.accessToken === null || data.success === false) {
-            return;
-          }
+  //   const googleCredentials = credentialResponse.credential;
+  //   googleSignin.mutate(
+  //     { token: googleCredentials, captcha: token },
+  //     {
+  //       onSuccess: async (data) => {
+  //         if (data.accessToken === null || data.success === false) {
+  //           return;
+  //         }
 
-          const result = await refetch();
-          if (result.isError) return;
-
-          dispatch(loginSuccess(result.data.user));
-          router.push("/");
-        },
-        onError: (error) => {
-          handleError(error, {
-            context: "Signin-Form",
-            notify: false,
-            setFormError: (msg) => {
-              form.setError("root", {
-                type: "manual",
-                message: msg,
-              });
-            },
-          });
-        },
-      }
-    );
-  };
+  //         const result = await refetch();
+  //         if (result.isError) return;
+  //         dispatch(loginSuccess(result.data.user));
+  //          router.push(data.redirectTo );
+  //       },
+  //       onError: (error) => {
+  //         handleError(error, {
+  //           context: "Signin-Form",
+  //           notify: false,
+  //           setFormError: (msg) => {
+  //             form.setError("root", {
+  //               type: "manual",
+  //               message: msg,
+  //             });
+  //           },
+  //         });
+  //       },
+  //     }
+  //   );
+  // };
 
   /**
    * @description Handle an error from the Google Sign-in
    * @returns {void}
    */
-  const handleGoogleError = () => {
-    handleError("Google-Signin-Error", {
-      context: "Google-Signin",
-      notify: false,
-      setFormError: (msg) => {
-        form.setError("root", {
-          type: "manual",
-          message: msg,
-        });
-      },
-    });
-  };
+  // const handleGoogleError = () => {
+  //   handleError("Google-Signin-Error", {
+  //     context: "Google-Signin",
+  //     notify: false,
+  //     setFormError: (msg) => {
+  //       form.setError("root", {
+  //         type: "manual",
+  //         message: msg,
+  //       });
+  //     },
+  //   });
+  // };
 
   return (
-    <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
-      <CardHeader>
-        <CardTitle className="text-4xl !text-pink-400">Sign In</CardTitle>
-        <CardDescription>Enter credentials to continue.</CardDescription>
+    <Card className="bg-card w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left">
+      <CardHeader className="flex items-center gap-4">
+        <Image
+          src={theme === "dark" ? dark_logo : light_logo}
+          alt="Logo"
+          width={100}
+          height={100}
+          className="w-22"
+        />
+        <div>
+          <CardTitle className="text-4xl !text-pink-400">Sign In</CardTitle>
+          <CardDescription>Enter credentials to continue.</CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -226,7 +248,11 @@ export const SignInForm = () => {
               )}
             />
             <div className="flex flex-col">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button
+                type="submit"
+                variant={"gradient"}
+                disabled={form.formState.isSubmitting}
+              >
                 {isSubmitting || signin.isPending ? (
                   <React.Fragment>
                     Signing in
@@ -237,13 +263,13 @@ export const SignInForm = () => {
                 )}
               </Button>
 
-              <div className="flex justify-center mt-5">
+              {/* <div className="flex justify-center mt-5">
                 <GoogleLogin
                   onSuccess={handleGoogleSuccess}
                   onError={handleGoogleError}
                   useOneTap
                 />
-              </div>
+              </div> */}
             </div>
             {errors.root?.message && (
               <div className="text-xs text-red-600 text-center">
@@ -270,6 +296,11 @@ export const SignInForm = () => {
           </div>
         </div>
       </CardContent>
+      <CardFooter>
+        <div className="w-full flex justify-center">
+          <RecaptchaV2 ref={recaptchaRef} variant="checkbox" />
+        </div>
+      </CardFooter>
     </Card>
   );
 };

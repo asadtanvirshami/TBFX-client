@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signUpSchema } from "@/schemas/auth-schema/schema";
@@ -20,6 +20,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -29,10 +30,18 @@ import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { handleError } from "@/utils/error-handler";
 import { extractErrorMessage } from "@/utils/error-extractor";
+import { useTheme } from "next-themes";
+
+import dark_logo from "../../../../../../public/assets/dark.png";
+import light_logo from "../../../../../../public/assets/light.png";
+import Image from "next/image";
+import RecaptchaV2, { RecaptchaV2Handle } from "@/lib/recaptcha";
 
 const SignUpForm = () => {
   const router = useRouter();
   const signup = useSignup();
+  const { theme } = useTheme();
+  const recaptchaRef = useRef<RecaptchaV2Handle>(null);
 
   const form = useForm<SignUpFormData>({
     resolver: yupResolver(signUpSchema),
@@ -62,9 +71,14 @@ const SignUpForm = () => {
    */
 
   const onSubmit = async (data: SignUpFormData) => {
+    const token = await recaptchaRef.current?.execute();
+    if (!token) throw new Error("Captcha missing");
+    console.log(data, token);
+    
     signup.mutate(
-      { ...data },
+      { ...data, captcha: token },
       {
+
         onSuccess: (res) => {
           if (res?.success === false) {
             setError("root", {
@@ -78,6 +92,7 @@ const SignUpForm = () => {
           router.push("/auth/signin");
         },
         onError: (error) => {
+          recaptchaRef.current?.reset();
           handleError(error, {
             context: "SignupForm",
             notify: false,
@@ -94,10 +109,19 @@ const SignUpForm = () => {
   };
 
   return (
-    <Card className=" w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !bg-transparent !border-none">
-      <CardHeader>
-        <CardTitle className="text-4xl !text-pink-400">Sign Up</CardTitle>
-        <CardDescription>Enter credentials to continue.</CardDescription>
+    <Card className="bg-card w-full md:w-[28rem] lg:w-[28rem] font-[family-name:var(--font-poppins)] !shadow-none fade-left !border-none">
+      <CardHeader className="flex items-center gap-4">
+        <Image
+          src={theme === "dark" ? dark_logo : light_logo}
+          alt="Logo"
+          width={100}
+          height={100}
+          className="w-22"
+        />
+        <div>
+          <CardTitle className="text-4xl !text-pink-400">Sign Up</CardTitle>
+          <CardDescription>Enter credentials to continue.</CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -186,6 +210,7 @@ const SignUpForm = () => {
 
             <Button
               type="submit"
+              variant={"gradient"}
               disabled={isSubmitting || signup.isPending}
               className="w-full"
             >
@@ -211,6 +236,11 @@ const SignUpForm = () => {
             Already have an account.
           </Link>
         </div>
+        <CardFooter>
+          <div className="w-full flex justify-center mt-3">
+            <RecaptchaV2 ref={recaptchaRef} variant="checkbox" />
+          </div>
+        </CardFooter>
       </CardContent>
     </Card>
   );
